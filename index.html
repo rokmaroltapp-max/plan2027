@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trening 2026/27</title>
+<title>Rokovi dnevniki — Trening 2026/27</title>
 <style>
   :root {
     --bg: #f8f9fa;
@@ -34,7 +34,7 @@
   /* HEADER */
   .header { background: linear-gradient(160deg,#f0fdf4 0%,#f0f9ff 60%,#fdf4ff 100%); border-bottom: 1px solid var(--border); padding: 28px 20px 20px; position: relative; overflow: hidden; }
   .header::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse at 10% 80%,rgba(47,158,68,0.07) 0%,transparent 55%), radial-gradient(ellipse at 85% 10%,rgba(230,119,0,0.06) 0%,transparent 50%); pointer-events:none; }
-  .header-inner { max-width: 880px; margin: 0 auto; position: relative; }
+  .header-inner { width: min(100%, 880px); max-width: 880px; margin: 0 auto; position: relative; min-width: 0; }
   .header-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; }
   .header-label { font-size: 10px; letter-spacing: 0.4em; color: var(--text4); text-transform: uppercase; margin-bottom: 6px; }
   .header h1 { font-size: clamp(20px,5vw,34px); font-weight: normal; color: #1a1a2e; letter-spacing: -0.02em; }
@@ -53,13 +53,13 @@
   .legend span { display: flex; align-items: center; gap: 4px; }
 
   /* TABS */
-  .tabs-wrap { max-width: 880px; margin: 0 auto; padding: 0 20px; }
+  .tabs-wrap { width: min(100%, 880px); max-width: 880px; margin: 0 auto; padding: 0 20px; min-width: 0; }
   .tabs { display: flex; border-bottom: 1px solid var(--border); margin-top: 4px; }
   .tab-btn { background: none; border: none; cursor: pointer; padding: 11px 18px; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; font-family: inherit; color: var(--text4); border-bottom: 2px solid transparent; transition: color 0.15s; }
   .tab-btn.active { color: var(--green); border-bottom-color: var(--green); }
 
   /* MAIN */
-  .main { max-width: 880px; margin: 0 auto; padding: 20px; }
+  .main { width: min(100%, 880px); max-width: 880px; margin: 0 auto; padding: 20px; min-width: 0; }
 
   /* OVERVIEW */
   .phase-section { margin-bottom: 28px; }
@@ -86,6 +86,15 @@
   .race-strip span { background:rgba(255,255,255,.65); border:1px solid var(--border); padding:5px 8px; border-radius:999px; }
   .race-strip strong { color:var(--purple); }
   .race-strip em { color:var(--text3); }
+  .race-countdown { margin-top:12px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; padding:10px 13px; border:1px solid #c7d2fe; border-radius:10px; background:rgba(238,242,255,.78); color:#3730a3; }
+  .race-countdown-label { font-size:11px; font-weight:700; letter-spacing:.03em; }
+  .race-countdown-name { font-size:13px; font-weight:700; color:#312e81; }
+  .race-countdown-date { font-size:10px; color:#6366a1; }
+  .race-countdown-time { display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin-left:auto; }
+  .countdown-unit { min-width:48px; text-align:center; padding:4px 6px; border-radius:7px; background:#fff; border:1px solid #c7d2fe; }
+  .countdown-value { display:block; font-size:17px; font-weight:800; line-height:1.1; font-variant-numeric:tabular-nums; }
+  .countdown-caption { display:block; margin-top:2px; font-size:8px; text-transform:uppercase; color:#6366a1; }
+  @media(max-width:600px){.race-countdown-time{margin-left:0}.race-countdown{gap:8px}}
   .week-card-focus { margin-top:7px; font-size:10px; color:var(--text3); line-height:1.35; }
   .week-card-load { margin-top:4px; font-size:9px; color:var(--text4); }
 
@@ -101,11 +110,20 @@
   .days-list { display: flex; flex-direction: column; gap: 8px; }
   .day-card { border-radius: 9px; overflow: hidden; }
   .day-card.rest { opacity: 0.5; }
-  .day-header { padding: 12px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .day-icon-col { width: 44px; text-align: center; flex-shrink: 0; }
-  .day-day { font-size: 10px; color: var(--text4); letter-spacing: 0.1em; margin-bottom: 1px; }
+  .day-card.today { opacity: 1 !important; border: 2px solid #e67700 !important; box-shadow: 0 0 0 3px #e677001f, 0 4px 14px #e6770022; }
+  .day-card.today .day-header { background: #fff4e6; }
+  .day-card.today .day-day { display: inline-block; padding: 4px 8px; border-radius: 5px; background: #e67700; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .02em; }
+  .day-header { padding: 12px 16px; display: grid; grid-template-columns: 112px minmax(0, 1fr) auto; align-items: center; column-gap: 12px; row-gap: 8px; }
+  .day-actions { justify-self: end; }
+  @media (max-width: 700px) {
+    .day-header { grid-template-columns: 72px minmax(0, 1fr); column-gap: 10px; }
+    .day-icon-col { width: 72px; }
+    .day-actions { grid-column: 2; justify-self: start; }
+  }
+  .day-icon-col { width: 112px; text-align: center; flex-shrink: 0; }
+  .day-day { font-size: 10px; color: var(--text4); letter-spacing: 0.02em; white-space: nowrap; margin-bottom: 1px; }
   .day-emoji { font-size: 22px; }
-  .day-info { flex: 1; min-width: 130px; }
+  .day-info { min-width: 0; }
   .day-type { font-size: 14px; font-style: italic; margin-bottom: 3px; }
   .day-type span { font-size: 11px; color: var(--text4); }
   .day-content { font-size: 13px; color: var(--text2); }
@@ -159,7 +177,7 @@
 
   /* INTERVALS.ICU PANEL */
   .icu-bar { background:#f0f9ff; border-bottom:1px solid #bae6fd; padding:8px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-  .icu-bar-inner { max-width:880px; margin:0 auto; width:100%; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .icu-bar-inner { width:min(100%, 880px); max-width:880px; min-width:0; margin:0 auto; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
   .icu-status { font-size:12px; color:#0369a1; display:flex; align-items:center; gap:6px; }
   .icu-status.error { color:#c92a2a; }
   .icu-status.ok { color:#2f9e44; }
@@ -189,6 +207,19 @@
     .race-strip span { font-size:10px; }
     .detail-label { min-width: unset; }
   }
+
+  /* RESPONSIVE ALIGNMENT: keep every page section on the same centered axis */
+  html, body { width:100%; max-width:100%; overflow-x:hidden; }
+  .header, .tabs-wrap, .main, .icu-bar { min-width:0; }
+  .header-inner, .tabs-wrap, .main, .icu-bar-inner { margin-left:auto; margin-right:auto; }
+  .header-top > *, .day-header > * { min-width:0; }
+  .race-strip, .legend, .header-stats-row { min-width:0; }
+  @media (max-width: 900px) {
+    .header-top { flex-direction:column; align-items:flex-start; }
+    .phase-pills { align-items:flex-start; }
+    .main { padding-left:14px; padding-right:14px; }
+    .tabs-wrap { padding-left:14px; padding-right:14px; }
+  }
 </style>
 </head>
 <body>
@@ -200,7 +231,7 @@
         <div class="header-label">ROKOVI TRENINGI - SEZONA 2026/27</div>
         <h1>Trening plan</h1>
         <div class="header-sub">Tek ali kolo, na morje ali na goro</div>
-        <div class="header-dates">28. september 2026 → <span>26. september 2027</span></div>
+        <div class="header-dates">28. september 2026 → <span>19. september 2027</span></div>
         <div class="header-stats-row">
           <div class="wellness-badge" id="fitness-fatigue" style="display:none;">
             💪 Fitnes (CTL): <span id="val-ctl">--</span>
@@ -210,11 +241,11 @@
         </div>
       </div>
       <div class="phase-pills">
-          <div class="phase-pill"><span class="phase-pill-weeks">T1–T8</span><span class="phase-pill-badge" style="background:#fff5f5;color:#c92a2a;border:1px solid #c92a2a55">GO4 & reset</span></div>
-          <div class="phase-pill"><span class="phase-pill-weeks">T9–T18</span><span class="phase-pill-badge" style="background:#ebfbee;color:#2f9e44;border:1px solid #2f9e4455">Baza + moč</span></div>
-          <div class="phase-pill"><span class="phase-pill-weeks">T19–T31</span><span class="phase-pill-badge" style="background:#e7f5ff;color:#1971c2;border:1px solid #1971c255">Ultra / UTVV</span></div>
-          <div class="phase-pill"><span class="phase-pill-weeks">T32–T45</span><span class="phase-pill-badge" style="background:#fff3bf;color:#e67700;border:1px solid #e6770055">Lavaredo → K24</span></div>
-          <div class="phase-pill"><span class="phase-pill-weeks">T46–T52</span><span class="phase-pill-badge" style="background:#f8f0fc;color:#6741d9;border:1px solid #6741d955">K24 → Nice · opcijsko</span></div>
+          <div class="phase-pill"><span class="phase-pill-weeks">28. 9. – 22. 11. 2026</span><span class="phase-pill-badge" style="background:#fff5f5;color:#c92a2a;border:1px solid #c92a2a55">GO4 & reset</span></div>
+          <div class="phase-pill"><span class="phase-pill-weeks">23. 11. 2026 – 31. 1. 2027</span><span class="phase-pill-badge" style="background:#ebfbee;color:#2f9e44;border:1px solid #2f9e4455">Baza + moč</span></div>
+          <div class="phase-pill"><span class="phase-pill-weeks">1. 2. – 2. 5. 2027</span><span class="phase-pill-badge" style="background:#e7f5ff;color:#1971c2;border:1px solid #1971c255">Ultra / UTVV</span></div>
+          <div class="phase-pill"><span class="phase-pill-weeks">3. 5. – 8. 8. 2027</span><span class="phase-pill-badge" style="background:#fff3bf;color:#e67700;border:1px solid #e6770055">Lavaredo → K24</span></div>
+          <div class="phase-pill"><span class="phase-pill-weeks">9. 8. – 26. 9. 2027</span><span class="phase-pill-badge" style="background:#f8f0fc;color:#6741d9;border:1px solid #6741d955">K24 → Istraland</span></div>
         </div>
       </div>
     </div>
@@ -227,10 +258,14 @@
     </div>
     <div class="race-strip">
       <span><b>7.11.2026 · 07:30</b> GO4Trail 64K</span>
-      <span><b>23.4.2027 · 19:00</b> UTVV 163K <em>opcijsko</em></span>
+      <span><b>23.4.2027 · 19:00</b> UTVV 163K</span>
       <span><b>26.6.2027 · 07:00</b> Lavaredo 80K <strong>★ glavni cilj</strong></span>
       <span><b>6.8.2027 · 22:00</b> K24 100K</span>
-      <span><b>24.9.2027 · 13:00</b> UTMB Nice 168K <em>opcijsko</em></span>
+      <span><b>17.9.2027 · 07:00</b> Istraland 400K</span>
+    </div>
+    <div class="race-countdown" id="race-countdown" aria-live="off">
+      <div><div class="race-countdown-label">ODŠTEVALNIK DO NASLEDNJE TEKME</div><div class="race-countdown-name" id="countdown-race-name">Nalagam naslednjo tekmo …</div><div class="race-countdown-date" id="countdown-race-date"></div></div>
+      <div class="race-countdown-time" id="countdown-values"></div>
     </div>
   </div>
 </div>
@@ -273,6 +308,42 @@ function toLocalISODate(date) {
   return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 }
 
+
+// ─── ODŠTEVALNIK DO NASLEDNJE TEKME ──────────────────────────────────────────
+const RACE_DATES = [
+  {name:"GO4Trail 64K", date:new Date(2026,10,7,7,30)},
+  {name:"UTVV 163K", date:new Date(2027,3,23,19,0)},
+  {name:"UTMB Lavaredo 80K", date:new Date(2027,5,26,7,0)},
+  {name:"K24 100K", date:new Date(2027,7,6,22,0)},
+  {name:"Istraland 400K", date:new Date(2027,8,17,7,0)},
+];
+function updateRaceCountdown() {
+  const now = new Date();
+  const next = RACE_DATES.find(r => r.date.getTime() > now.getTime());
+  const nameEl = document.getElementById("countdown-race-name");
+  const dateEl = document.getElementById("countdown-race-date");
+  const valuesEl = document.getElementById("countdown-values");
+  if (!nameEl || !dateEl || !valuesEl) return;
+  if (!next) {
+    nameEl.textContent = "Vse načrtovane tekme so zaključene";
+    dateEl.textContent = "Sezona 2026/27";
+    valuesEl.innerHTML = "";
+    return;
+  }
+  const diff = Math.max(0, next.date.getTime() - now.getTime());
+  const totalSeconds = Math.floor(diff / 1000);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  nameEl.textContent = next.name;
+  dateEl.textContent = next.date.toLocaleString("sl-SI", {day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit"});
+  const units = [[days,"dni"],[hours,"ur"],[minutes,"min"],[seconds,"sek"]];
+  valuesEl.innerHTML = units.map(([v,label]) => `<div class="countdown-unit"><span class="countdown-value">${String(v).padStart(2,"0")}</span><span class="countdown-caption">${label}</span></div>`).join("");
+}
+updateRaceCountdown();
+setInterval(updateRaceCountdown, 1000);
+
 // ─── DATA ────────────────────────────────────────────────────────────────────
 const PHASES = [
   {name:"GO4 priprava", weeks:[1,2,3,4,5,6], color:"#c92a2a", desc:"Zaključek priprave na GO4Trail 64 km · nato premišljen reset."},
@@ -282,7 +353,7 @@ const PHASES = [
   {name:"UTVV blok", weeks:[30,31], color:"#6741d9", desc:"UTVV je opcijska kontrolirana ultra; po tekmi sledi zaščita Lavareda."},
   {name:"Lavaredo spec.", weeks:[32,33,34,35,36,37,38], color:"#e67700", desc:"Gorska specifičnost, spusti, dolgi traili, peak in taper."},
   {name:"Lavaredo → K24", weeks:[39,40,41,42,43,44,45], color:"#ae3ec9", desc:"Glavni cilj Lavaredo, nato regeneracija in drugi vrh na K24."},
-  {name:"K24 → UTMB Nice", weeks:[46,47,48,49,50,51,52], color:"#6741d9", desc:"Po K24 najprej regeneracija; nato kratka specifična priprava za UTMB Nice 168K. Tekma ostane opcijska."},
+  {name:"K24 → Istraland", weeks:[46,47,48,49,50,51,52], color:"#6741d9", desc:"Po K24 regeneracija, nato postopna kolesarska priprava za Istraland 400 km."},
 ];
 const TYPE_ICONS = {
   "Počitek":"💤","Intervali":"⚡","Prag/klanec":"⛰️","Klanec":"📈","Moč":"💪",
@@ -510,314 +581,314 @@ const RAW = [
   {w:8,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
   {w:8,d:"SOB",t:"Dolg trail",a:"2:30 h trail (~18–20 km), Z2, brez lovljenja D+",b:"4:00 h kolo Z2",z:"Z2"},
   {w:8,d:"NED",t:"Aktivno",a:"60′ Z1",b:"90′ Z1 (~10–12 km) kolo",z:"Z1"},
-  {w:9,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:9,d:"TOR",t:"Intervali",a:"6×3′ hrib @Z4",b:"6×5′ klanec @Z4, 50–60 rpm",z:"Z4"},
-  {w:9,d:"SRE",t:"Moč",a:"35–45′ moč nog + trup",b:"35–45′ moč nog + trup",z:"Srednja"},
-  {w:9,d:"ČET",t:"Aerobno",a:"60–75′ Z2",b:"90–105′ Z2",z:"Z2"},
-  {w:9,d:"PET",t:"Počitek",a:"Počitek ali 15′ mobilnost",b:"Počitek ali 15′ mobilnost",z:"/"},
-  {w:9,d:"SOB",t:"Dolg trail",a:"2:30–3:00 h trail (~18–22 km), Z2",b:"4:00 h kolo, Z2, 800–1200 m D+",z:"Z2"},
-  {w:9,d:"NED",t:"Aktivno",a:"45–60′ Z1",b:"60–75′ Z1",z:"Z1"},
-  {w:10,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:10,d:"TOR",t:"Intervali",a:"6×3′ hrib @Z4",b:"6×5′ klanec @Z4, 50–60 rpm",z:"Z4"},
-  {w:10,d:"SRE",t:"Moč",a:"35–45′ moč nog + trup",b:"35–45′ moč nog + trup",z:"Srednja"},
-  {w:10,d:"ČET",t:"Aerobno",a:"60–75′ Z2",b:"90–105′ Z2",z:"Z2"},
-  {w:10,d:"PET",t:"Počitek",a:"Počitek ali 15′ mobilnost",b:"Počitek ali 15′ mobilnost",z:"/"},
-  {w:10,d:"SOB",t:"Dolg trail",a:"2:30–3:00 h trail (~18–22 km), Z2",b:"4:00 h kolo, Z2, 800–1200 m D+",z:"Z2"},
-  {w:10,d:"NED",t:"Aktivno",a:"45–60′ Z1",b:"60–75′ Z1",z:"Z1"},
-  {w:11,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:11,d:"TOR",t:"Intervali",a:"6×3′ hrib @Z4",b:"6×5′ klanec @Z4, 50–60 rpm",z:"Z4"},
-  {w:11,d:"SRE",t:"Moč",a:"35–45′ moč nog + trup",b:"35–45′ moč nog + trup",z:"Srednja"},
-  {w:11,d:"ČET",t:"Aerobno",a:"60–75′ Z2",b:"90–105′ Z2",z:"Z2"},
-  {w:11,d:"PET",t:"Počitek",a:"Počitek ali 15′ mobilnost",b:"Počitek ali 15′ mobilnost",z:"/"},
-  {w:11,d:"SOB",t:"Dolg trail",a:"2:30–3:00 h trail (~18–22 km), Z2",b:"4:00 h kolo, Z2, 800–1200 m D+",z:"Z2"},
-  {w:11,d:"NED",t:"Aktivno",a:"45–60′ Z1",b:"60–75′ Z1",z:"Z1"},
-  {w:12,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:12,d:"TOR",t:"Prag/klanec",a:"5×5′ vzpon @Z4, 3′ lahkotno",b:"5×8′ klanec @Z4, 60–70 rpm",z:"Z4"},
-  {w:12,d:"SRE",t:"Moč",a:"40′ moč nog + trup",b:"40′ moč nog + trup",z:"Srednja"},
-  {w:12,d:"ČET",t:"Aerobno",a:"75–90′ Z2",b:"2:00–2:15 h Z2",z:"Z2"},
-  {w:12,d:"PET",t:"Počitek",a:"Počitek ali 15′ mobilnost",b:"Počitek ali 15′ mobilnost",z:"/"},
-  {w:12,d:"SOB",t:"Dolg trail",a:"3:00–3:30 h trail (~22–27 km), 800–1200 m D+, Z2",b:"4:30–5:00 h kolo, valovito, 1000–1500 m D+",z:"Z2"},
-  {w:12,d:"NED",t:"Back-to-back",a:"75–90′ Z1 (~10–12 km) (~10–14 km) na utrujene noge",b:"1:30–1:45 h zelo lahkotno kolo",z:"Z1"},
-  {w:13,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:13,d:"TOR",t:"Klanec",a:"5×3′ hrib @Z3, lahkotno",b:"5×5′ klanec @Z3",z:"Z3"},
-  {w:13,d:"SRE",t:"Moč",a:"35–45′ moč nog + trup",b:"35–45′ moč nog + trup",z:"Srednja"},
-  {w:13,d:"ČET",t:"Aerobno",a:"60′ Z2",b:"90′ Z2",z:"Z2"},
-  {w:13,d:"PET",t:"Počitek",a:"Počitek ali 15′ mobilnost",b:"Počitek ali 15′ mobilnost",z:"/"},
-  {w:13,d:"SOB",t:"Dolg trail",a:"2:30 h lahkotno, Z2",b:"4:00 h kolo Z2",z:"Z2"},
-  {w:13,d:"NED",t:"Aktivno",a:"60′ Z1",b:"90′ Z1 (~10–12 km) kolo",z:"Z1"},
-  {w:14,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:14,d:"TOR",t:"Intervali",a:"6×3′ hrib @Z4",b:"6×5′ klanec @Z4, 50–60 rpm",z:"Z4"},
-  {w:14,d:"SRE",t:"Moč",a:"35–45′ moč nog + trup",b:"35–45′ moč nog + trup",z:"Srednja"},
-  {w:14,d:"ČET",t:"Aerobno",a:"60–75′ Z2",b:"90–105′ Z2",z:"Z2"},
-  {w:14,d:"PET",t:"Počitek",a:"Počitek ali 15′ mobilnost",b:"Počitek ali 15′ mobilnost",z:"/"},
-  {w:14,d:"SOB",t:"Dolg trail",a:"2:30–3:00 h trail (~18–22 km), Z2",b:"4:00 h kolo, Z2, 800–1200 m D+",z:"Z2"},
-  {w:14,d:"NED",t:"Aktivno",a:"45–60′ Z1",b:"60–75′ Z1",z:"Z1"},
-  {w:15,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:15,d:"TOR",t:"Prag/klanec",a:"5×5′ vzpon @Z4, 3′ lahkotno",b:"5×8′ klanec @Z4, 60–70 rpm",z:"Z4"},
-  {w:15,d:"SRE",t:"Moč",a:"40′ moč nog + trup",b:"40′ moč nog + trup",z:"Srednja"},
-  {w:15,d:"ČET",t:"Aerobno",a:"75–90′ Z2",b:"2:00–2:15 h Z2",z:"Z2"},
-  {w:15,d:"PET",t:"Počitek",a:"Počitek ali 15′ mobilnost",b:"Počitek ali 15′ mobilnost",z:"/"},
-  {w:15,d:"SOB",t:"Dolg trail",a:"3:00–3:30 h trail (~22–27 km), 800–1200 m D+, Z2",b:"4:30–5:00 h kolo, valovito, 1000–1500 m D+",z:"Z2"},
-  {w:15,d:"NED",t:"Back-to-back",a:"75–90′ Z1 (~10–12 km) (~10–14 km) na utrujene noge",b:"1:30–1:45 h zelo lahkotno kolo",z:"Z1"},
-  {w:16,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:16,d:"TOR",t:"Prag/klanec",a:"5×5′ vzpon @Z4, 3′ lahkotno",b:"5×8′ klanec @Z4, 60–70 rpm",z:"Z4"},
-  {w:16,d:"SRE",t:"Moč",a:"40′ moč nog + trup",b:"40′ moč nog + trup",z:"Srednja"},
-  {w:16,d:"ČET",t:"Aerobno",a:"75–90′ Z2",b:"2:00–2:15 h Z2",z:"Z2"},
-  {w:16,d:"PET",t:"Počitek",a:"Počitek ali 15′ mobilnost",b:"Počitek ali 15′ mobilnost",z:"/"},
-  {w:16,d:"SOB",t:"Dolg trail",a:"3:00–3:30 h trail (~22–27 km), 800–1200 m D+, Z2",b:"4:30–5:00 h kolo, valovito, 1000–1500 m D+",z:"Z2"},
-  {w:16,d:"NED",t:"Back-to-back",a:"75–90′ Z1 (~10–12 km) (~10–14 km) na utrujene noge",b:"1:30–1:45 h zelo lahkotno kolo",z:"Z1"},
-  {w:17,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:17,d:"TOR",t:"Klanec",a:"5×3′ hrib @Z3, lahkotno",b:"5×5′ klanec @Z3",z:"Z3"},
-  {w:17,d:"SRE",t:"Moč",a:"35–45′ moč nog + trup",b:"35–45′ moč nog + trup",z:"Srednja"},
-  {w:17,d:"ČET",t:"Aerobno",a:"60′ Z2",b:"90′ Z2",z:"Z2"},
-  {w:17,d:"PET",t:"Počitek",a:"Počitek ali 15′ mobilnost",b:"Počitek ali 15′ mobilnost",z:"/"},
-  {w:17,d:"SOB",t:"Dolg trail",a:"2:30 h lahkotno, Z2",b:"4:00 h kolo Z2",z:"Z2"},
-  {w:17,d:"NED",t:"Aktivno",a:"60′ Z1",b:"90′ Z1 (~10–12 km) kolo",z:"Z1"},
-  {w:18,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:18,d:"TOR",t:"Prag/klanec",a:"5×5′ vzpon @Z4, 3′ lahkotno",b:"5×8′ klanec @Z4, 60–70 rpm",z:"Z4"},
-  {w:18,d:"SRE",t:"Moč",a:"40′ moč nog + trup",b:"40′ moč nog + trup",z:"Srednja"},
-  {w:18,d:"ČET",t:"Aerobno",a:"75–90′ Z2",b:"2:00–2:15 h Z2",z:"Z2"},
-  {w:18,d:"PET",t:"Počitek",a:"Počitek ali 15′ mobilnost",b:"Počitek ali 15′ mobilnost",z:"/"},
-  {w:18,d:"SOB",t:"Dolg trail",a:"3:00–3:30 h trail (~22–27 km), 800–1200 m D+, Z2",b:"4:30–5:00 h kolo, valovito, 1000–1500 m D+",z:"Z2"},
-  {w:18,d:"NED",t:"Back-to-back",a:"75–90′ Z1 (~10–12 km) (~10–14 km) na utrujene noge",b:"1:30–1:45 h zelo lahkotno kolo",z:"Z1"},
-  {w:19,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:19,d:"TOR",t:"Klanec",a:"6×5′ vzpon @Z4, 3′ lahkotno",b:"6×8′ klanec @Z4",z:"Z4"},
-  {w:19,d:"SRE",t:"Moč",a:"35′ moč + trup",b:"35′ moč + trup",z:"Srednja"},
-  {w:19,d:"ČET",t:"Spec. vzdržl.",a:"90–105′ Z2 z 4×10′ Z3 na vzponih",b:"2:30–3:00 h Z2 z 4×12′ Z3",z:"Z2/Z3"},
-  {w:19,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:19,d:"SOB",t:"Dolg trail",a:"4:00 h trail (~28–30 km), 1000–1400 m D+, Z2",b:"5:30–6:00 h kolo, 1300–1700 m D+, Z2",z:"Z2"},
-  {w:19,d:"NED",t:"Back-to-back",a:"90′ Z1 (~10–12 km)–Z2 na utrujene noge",b:"2:00 h Z1 (~13–15 km) kolo",z:"Z1/Z2"},
-  {w:20,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:20,d:"TOR",t:"Klanec",a:"6×5′ vzpon @Z4, 3′ lahkotno",b:"6×8′ klanec @Z4",z:"Z4"},
-  {w:20,d:"SRE",t:"Moč",a:"35′ moč + trup",b:"35′ moč + trup",z:"Srednja"},
-  {w:20,d:"ČET",t:"Spec. vzdržl.",a:"90–105′ Z2 z 4×10′ Z3 na vzponih",b:"2:30–3:00 h Z2 z 4×12′ Z3",z:"Z2/Z3"},
-  {w:20,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:20,d:"SOB",t:"Dolg trail",a:"4:00 h trail (~28–30 km), 1000–1400 m D+, Z2",b:"5:30–6:00 h kolo, 1300–1700 m D+, Z2",z:"Z2"},
-  {w:20,d:"NED",t:"Back-to-back",a:"90′ Z1 (~10–12 km)–Z2 na utrujene noge",b:"2:00 h Z1 (~13–15 km) kolo",z:"Z1/Z2"},
-  {w:21,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:21,d:"TOR",t:"Klanec",a:"6×5′ vzpon @Z4, 3′ lahkotno",b:"6×8′ klanec @Z4",z:"Z4"},
-  {w:21,d:"SRE",t:"Moč",a:"35′ moč + trup",b:"35′ moč + trup",z:"Srednja"},
-  {w:21,d:"ČET",t:"Spec. vzdržl.",a:"90–105′ Z2 z 4×10′ Z3 na vzponih",b:"2:30–3:00 h Z2 z 4×12′ Z3",z:"Z2/Z3"},
-  {w:21,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:21,d:"SOB",t:"Dolg trail",a:"4:30 h trail (~31–34 km), 1200–1700 m D+, zadnja 45′ Z2/Z3",b:"6:00–6:30 h kolo, 1500–2000 m D+, Z2/Z3",z:"Z2"},
-  {w:21,d:"NED",t:"Back-to-back",a:"2:00 h Z1 (~13–15 km)–Z2 (~14–16 km)",b:"2:30 h Z1 kolo",z:"Z1/Z2"},
-  {w:22,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:22,d:"TOR",t:"Klanec",a:"5×4′ vzpon @Z3/Z4, kontrolirano",b:"5×7′ klanec @Z3/Z4",z:"Z3/Z4"},
-  {w:22,d:"SRE",t:"Moč",a:"30–35′ vzdrževanje moči",b:"30–35′ vzdrževanje moči",z:"Srednja"},
-  {w:22,d:"ČET",t:"Aerobno",a:"75′ Z2",b:"2:00 h Z2",z:"Z2"},
-  {w:22,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:22,d:"SOB",t:"Dolg trail",a:"3:00 h lahkotno (~21–23 km), 700–1000 m D+",b:"5:00 h kolo Z2, 1000–1400 m D+",z:"Z2"},
-  {w:22,d:"NED",t:"Aktivno",a:"75′ Z1 ali sprehod",b:"2:00 h Z1 (~13–15 km) kolo",z:"Z1"},
-  {w:23,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:23,d:"TOR",t:"Klanec",a:"6×5′ vzpon @Z4, 3′ lahkotno",b:"6×8′ klanec @Z4",z:"Z4"},
-  {w:23,d:"SRE",t:"Moč",a:"35′ moč + trup",b:"35′ moč + trup",z:"Srednja"},
-  {w:23,d:"ČET",t:"Spec. vzdržl.",a:"90–105′ Z2 z 4×10′ Z3 na vzponih",b:"2:30–3:00 h Z2 z 4×12′ Z3",z:"Z2/Z3"},
-  {w:23,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:23,d:"SOB",t:"Dolg trail",a:"4:30 h trail (~31–34 km), 1200–1700 m D+, zadnja 45′ Z2/Z3",b:"6:00–6:30 h kolo, 1500–2000 m D+, Z2/Z3",z:"Z2"},
-  {w:23,d:"NED",t:"Back-to-back",a:"2:00 h Z1 (~13–15 km)–Z2 (~14–16 km)",b:"2:30 h Z1 kolo",z:"Z1/Z2"},
-  {w:24,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:24,d:"TOR",t:"Klanec",a:"6×5′ vzpon @Z4, 3′ lahkotno",b:"6×8′ klanec @Z4",z:"Z4"},
-  {w:24,d:"SRE",t:"Moč",a:"35′ moč + trup",b:"35′ moč + trup",z:"Srednja"},
-  {w:24,d:"ČET",t:"Spec. vzdržl.",a:"90–105′ Z2 z 4×10′ Z3 na vzponih",b:"2:30–3:00 h Z2 z 4×12′ Z3",z:"Z2/Z3"},
-  {w:24,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:24,d:"SOB",t:"Dolg trail",a:"5:00 h trail (~35–38 km), 1300–1800 m D+, 60–80 g OH/h",b:"6:30–7:00 h kolo, 1700–2200 m D+, 70–90 g OH/h",z:"Z2"},
-  {w:24,d:"NED",t:"Back-to-back",a:"2:00–2:30 h Z1 (~14–18 km)",b:"2:30–3:00 h Z1 kolo",z:"Z1/Z2"},
-  {w:25,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:25,d:"TOR",t:"Klanec",a:"5×4′ vzpon @Z3/Z4, kontrolirano",b:"5×7′ klanec @Z3/Z4",z:"Z3/Z4"},
-  {w:25,d:"SRE",t:"Moč",a:"30–35′ vzdrževanje moči",b:"30–35′ vzdrževanje moči",z:"Srednja"},
-  {w:25,d:"ČET",t:"Aerobno",a:"75′ Z2",b:"2:00 h Z2",z:"Z2"},
-  {w:25,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:25,d:"SOB",t:"Dolg trail",a:"3:00 h lahkotno (~21–23 km), 700–1000 m D+",b:"5:00 h kolo Z2, 1000–1400 m D+",z:"Z2"},
-  {w:25,d:"NED",t:"Aktivno",a:"75′ Z1 ali sprehod",b:"2:00 h Z1 (~13–15 km) kolo",z:"Z1"},
-  {w:26,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:26,d:"TOR",t:"Klanec",a:"6×5′ vzpon @Z4, 3′ lahkotno",b:"6×8′ klanec @Z4",z:"Z4"},
-  {w:26,d:"SRE",t:"Moč",a:"35′ moč + trup",b:"35′ moč + trup",z:"Srednja"},
-  {w:26,d:"ČET",t:"Spec. vzdržl.",a:"90–105′ Z2 z 4×10′ Z3 na vzponih",b:"2:30–3:00 h Z2 z 4×12′ Z3",z:"Z2/Z3"},
-  {w:26,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:26,d:"SOB",t:"Dolg trail",a:"5:00 h trail (~35–38 km), 1300–1800 m D+, 60–80 g OH/h",b:"6:30–7:00 h kolo, 1700–2200 m D+, 70–90 g OH/h",z:"Z2"},
-  {w:26,d:"NED",t:"Back-to-back",a:"2:00–2:30 h Z1 (~14–18 km)",b:"2:30–3:00 h Z1 kolo",z:"Z1/Z2"},
-  {w:27,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:27,d:"TOR",t:"Klanec",a:"6×5′ vzpon @Z4, 3′ lahkotno",b:"6×8′ klanec @Z4",z:"Z4"},
-  {w:27,d:"SRE",t:"Moč",a:"35′ moč + trup",b:"35′ moč + trup",z:"Srednja"},
-  {w:27,d:"ČET",t:"Spec. vzdržl.",a:"90–105′ Z2 z 4×10′ Z3 na vzponih",b:"2:30–3:00 h Z2 z 4×12′ Z3",z:"Z2/Z3"},
-  {w:27,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:27,d:"SOB",t:"Dolg trail",a:"5:00–5:30 h trail (~35–40 km), 1500–2000 m D+, zadnja 60′ zelo kontrolirano",b:"7:00 h kolo, 1800–2300 m D+",z:"Z2"},
-  {w:27,d:"NED",t:"Back-to-back",a:"2:00 h Z1 (~13–15 km)–Z2 (~14–16 km)",b:"2:30 h Z1 kolo",z:"Z1/Z2"},
-  {w:28,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:28,d:"TOR",t:"Klanec",a:"4×5′ vzpon @Z4, brez izčrpavanja",b:"4×8′ klanec @Z4",z:"Z4"},
-  {w:28,d:"SRE",t:"Moč",a:"30′ vzdrževanje",b:"30′ vzdrževanje",z:"Srednja"},
-  {w:28,d:"ČET",t:"Spec. vzdržl.",a:"90′ Z2 z 3×10′ Z3",b:"2:30 h Z2 z 3×12′ Z3",z:"Z2/Z3"},
-  {w:28,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:28,d:"SOB",t:"Dolg trail",a:"4:00 h trail (~28–30 km), 1200–1600 m D+, vadi prehrano/opremo",b:"6:00 h kolo, 1500–2000 m D+",z:"Z2"},
-  {w:28,d:"NED",t:"Back-to-back",a:"2:00 h zelo lahkotno",b:"2:30 h zelo lahkotno kolo",z:"Z1"},
-  {w:29,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:29,d:"TOR",t:"Klanec",a:"4×4′ vzpon @Z3/Z4, brez utrujanja",b:"4×6′ klanec @Z3/Z4",z:"Z3/Z4"},
-  {w:29,d:"SRE",t:"Moč",a:"25′ zelo lahka moč",b:"25′ zelo lahka moč",z:"Nizka"},
-  {w:29,d:"ČET",t:"Kratek tek/kolo",a:"60′ Z2",b:"90′ Z2",z:"Z2"},
-  {w:29,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:29,d:"SOB",t:"Dolg trail",a:"2:30 h trail (~18–20 km) Z2 + 6×20″ pospešek",b:"4:00 h kolo Z2",z:"Z2"},
-  {w:29,d:"NED",t:"Aktivno",a:"60′ Z1",b:"90′ Z1 (~10–12 km) kolo",z:"Z1"},
-  {w:30,d:"PON",t:"Počitek",a:"Počitek + priprava opreme",b:"Počitek + priprava opreme",z:"/"},
-  {w:30,d:"TOR",t:"Aktivacija",a:"40′ Z1–Z2 + 3×2′ Z3",b:"60′ Z1–Z2 + 3×3′ Z3",z:"Z2/Z3"},
-  {w:30,d:"SRE",t:"Mobilnost",a:"20′ mobilnost",b:"20′ mobilnost",z:"Nizka"},
-  {w:30,d:"ČET",t:"Kratek tek/kolo",a:"35′ Z1",b:"45′ Z1",z:"Z1"},
-  {w:30,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:30,d:"PET",t:"TEKMA",a:"UTVV 163 km 🏁 · 23. 4. 2027 · start 19:00 · OPCIJSKO / kontrolirano",b:"UTVV 163 km 🏁 · start 19:00 · kolo NI alternativa",z:"MAX"},
-  {w:30,d:"NED",t:"REGENERACIJA",a:"Počitek / spanje / hidracija",b:"Počitek / zelo lahkotno",z:"/"},
-  {w:31,d:"PON",t:"Počitek",a:"Popoln počitek",b:"Popoln počitek",z:"/"},
-  {w:31,d:"TOR",t:"Regeneracija",a:"30–45′ Z1 ali hoja, samo če so noge OK",b:"45–60′ Z1 kolo",z:"Z1"},
-  {w:31,d:"SRE",t:"Mobilnost",a:"20–30′ mobilnost",b:"20–30′ mobilnost",z:"Nizka"},
-  {w:31,d:"ČET",t:"Regeneracija",a:"30–45′ Z1",b:"60′ Z1 kolo",z:"Z1"},
-  {w:31,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:31,d:"SOB",t:"Aktivno",a:"60–120′ hoja/pohod ali počitek",b:"90′ lahkotno kolo",z:"Z1"},
-  {w:31,d:"NED",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:32,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:32,d:"TOR",t:"Klanec",a:"5×5′ vzpon @Z4",b:"5×8′ klanec @Z4",z:"Z4"},
-  {w:32,d:"SRE",t:"Moč",a:"30′ vzdrževanje moči",b:"30′ vzdrževanje moči",z:"Srednja"},
-  {w:32,d:"ČET",t:"Spec. vzdržl.",a:"90′ Z2 + 4×8′ Z3",b:"2:30 h Z2 + 4×10′ Z3",z:"Z2/Z3"},
-  {w:32,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:32,d:"SOB",t:"Dolg trail",a:"3:30 h trail (~25–27 km), 1000–1400 m D+, tehnični spusti",b:"5:00 h kolo, 1300–1700 m D+",z:"Z2"},
-  {w:32,d:"NED",t:"Back-to-back",a:"90′ Z1 (~10–12 km)–Z2",b:"2:00 h Z1 (~13–15 km) kolo",z:"Z1/Z2"},
-  {w:33,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:33,d:"TOR",t:"Klanec",a:"6×6′ vzpon @Z4",b:"6×9′ klanec @Z4",z:"Z4"},
-  {w:33,d:"SRE",t:"Moč",a:"30′ moč + meča",b:"30′ moč + meča",z:"Srednja"},
-  {w:33,d:"ČET",t:"Spec. vzdržl.",a:"100′ Z2 z 5×8′ Z3 na klancu",b:"2:45 h Z2 z 5×10′ Z3",z:"Z2/Z3"},
-  {w:33,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:33,d:"SOB",t:"Dolg trail",a:"4:00 h trail (~28–30 km), 1200–1600 m D+, fokus na spustih",b:"5:30–6:00 h kolo, 1500–1900 m D+",z:"Z2"},
-  {w:33,d:"NED",t:"Back-to-back",a:"2:00 h Z1 (~13–15 km)–Z2 (~14–16 km)",b:"2:30 h Z1 kolo",z:"Z1/Z2"},
-  {w:34,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:34,d:"TOR",t:"Klanec",a:"5×8′ vzpon @Z4, kontrolirano",b:"5×12′ klanec @Z4",z:"Z4"},
-  {w:34,d:"SRE",t:"Moč",a:"25–30′ vzdrževanje",b:"25–30′ vzdrževanje",z:"Srednja"},
-  {w:34,d:"ČET",t:"Spec. vzdržl.",a:"100′ Z2/Z3, vključuj dolge vzpone",b:"3:00 h Z2/Z3 na valovitem terenu",z:"Z2/Z3"},
-  {w:34,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:34,d:"SOB",t:"Dolg trail",a:"4:30–5:00 h trail (~31–37 km), 1300–1800 m D+, vadi palice/prehrano",b:"6:00–6:30 h kolo, 1600–2100 m D+",z:"Z2"},
-  {w:34,d:"NED",t:"Back-to-back",a:"2:00–2:30 h Z1 (~14–18 km)–Z2 (~14–18 km)",b:"2:30–3:00 h Z1 kolo",z:"Z1/Z2"},
-  {w:35,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:35,d:"TOR",t:"Klanec",a:"5×8′ vzpon @Z4, kontrolirano",b:"5×12′ klanec @Z4",z:"Z4"},
-  {w:35,d:"SRE",t:"Moč",a:"25–30′ vzdrževanje",b:"25–30′ vzdrževanje",z:"Srednja"},
-  {w:35,d:"ČET",t:"Spec. vzdržl.",a:"100′ Z2/Z3, vključuj dolge vzpone",b:"3:00 h Z2/Z3 na valovitem terenu",z:"Z2/Z3"},
-  {w:35,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:35,d:"SOB",t:"Dolg trail",a:"4:30–5:00 h trail (~31–37 km), 1300–1800 m D+, vadi palice/prehrano",b:"6:00–6:30 h kolo, 1600–2100 m D+",z:"Z2"},
-  {w:35,d:"NED",t:"Back-to-back",a:"2:00–2:30 h Z1 (~14–18 km)–Z2 (~14–18 km)",b:"2:30–3:00 h Z1 kolo",z:"Z1/Z2"},
-  {w:36,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:36,d:"TOR",t:"Klanec",a:"6×6′ vzpon @Z4",b:"6×10′ klanec @Z4",z:"Z4"},
-  {w:36,d:"SRE",t:"Moč",a:"25′ vzdrževanje",b:"25′ vzdrževanje",z:"Srednja"},
-  {w:36,d:"ČET",t:"Spec. vzdržl.",a:"90′ Z2 z 30′ specifičnega vzpona",b:"2:30 h Z2 z 40′ specifičnih vzponov",z:"Z2/Z3"},
-  {w:36,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:36,d:"SOB",t:"Dolg trail",a:"4:30–5:00 h trail (~31–37 km), najbolj podoben Lavaredo terenu; brez dirkanja",b:"6:00 h MTB/cestno z veliko D+",z:"Z2"},
-  {w:36,d:"NED",t:"Back-to-back",a:"2:00 h Z1 (~13–15 km)",b:"2:30 h Z1 kolo",z:"Z1"},
-  {w:37,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:37,d:"TOR",t:"Klanec",a:"5×5′ Z4, zadnjič težje",b:"5×8′ Z4, zadnjič težje",z:"Z4"},
-  {w:37,d:"SRE",t:"Moč",a:"20–25′ samo vzdrževanje",b:"20–25′ samo vzdrževanje",z:"Nizka/Srednja"},
-  {w:37,d:"ČET",t:"Spec. vzdržl.",a:"90′ Z2 z 4×10′ Z3",b:"2:30 h Z2 z 4×12′ Z3",z:"Z2/Z3"},
-  {w:37,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:37,d:"SOB",t:"Dolg trail",a:"5:00–5:30 h peak simulacija (~35–40 km), 1500–2000 m D+, prehrana/oprema",b:"7:00 h kolo, 1800–2300 m D+",z:"Z2"},
-  {w:37,d:"NED",t:"Back-to-back",a:"2:00 h Z1 (~13–15 km)–Z2 (~14–16 km)",b:"2:30 h Z1 kolo",z:"Z1/Z2"},
-  {w:38,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:38,d:"TOR",t:"Aktivacija",a:"5×3′ vzpon @Z3/Z4",b:"5×5′ klanec @Z3/Z4",z:"Z3/Z4"},
-  {w:38,d:"SRE",t:"Mobilnost",a:"25′ mobilnost + meča",b:"25′ mobilnost + meča",z:"Nizka"},
-  {w:38,d:"ČET",t:"Kratek tek/kolo",a:"60′ Z2",b:"90′ Z2",z:"Z2"},
-  {w:38,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:38,d:"SOB",t:"Dolg trail",a:"3:00 h sproščeno (~21–23 km), 800–1000 m D+",b:"4:30 h sproščeno kolo",z:"Z2"},
-  {w:38,d:"NED",t:"Aktivno",a:"60′ Z1",b:"90′ Z1 (~10–12 km) kolo",z:"Z1"},
-  {w:39,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:39,d:"TOR",t:"Aktivacija",a:"40′ Z1–Z2 + 4×60″ Z3, polno okrevanje",b:"60′ Z1–Z2 + 4×90″ Z3",z:"Z2/Z3"},
-  {w:39,d:"SRE",t:"Mobilnost",a:"20′ mobilnost",b:"20′ mobilnost",z:"Nizka"},
-  {w:39,d:"ČET",t:"Kratek tek/kolo",a:"35–45′ Z1–Z2",b:"60′ Z1–Z2",z:"Z1/Z2"},
-  {w:39,d:"PET",t:"Počitek",a:"Počitek + oprema, hidracija",b:"Počitek + oprema, hidracija",z:"/"},
-  {w:39,d:"SOB",t:"TEKMA",a:"UTMB Lavaredo 80K 🏔️🏁 · 26. 6. 2027 · start 07:00 · GLAVNI CILJ",b:"UTMB Lavaredo 80K 🏔️🏁 · start 07:00 · tekma; kolo ni alternativa",z:"MAX"},
-  {w:39,d:"NED",t:"REGENERACIJA",a:"Počitek / sprehod / hidracija",b:"Počitek ali 30′ Z1 kolo",z:"/"},
-  {w:40,d:"PON",t:"Počitek",a:"Popoln počitek",b:"Popoln počitek",z:"/"},
-  {w:40,d:"TOR",t:"Regeneracija",a:"30–45′ Z1 ali hoja",b:"45–60′ Z1 kolo",z:"Z1"},
-  {w:40,d:"SRE",t:"Mobilnost",a:"20–30′ mobilnost",b:"20–30′ mobilnost",z:"Nizka"},
-  {w:40,d:"ČET",t:"Regeneracija",a:"30–45′ Z1",b:"60′ Z1 kolo",z:"Z1"},
-  {w:40,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:40,d:"SOB",t:"Aktivno",a:"60–90′ pohod/hoja, brez pritiska",b:"90′ zelo lahkotno kolo",z:"Z1"},
-  {w:40,d:"NED",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:41,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:41,d:"TOR",t:"Kratek tek/kolo",a:"60′ Z2 + 4×20″",b:"90′ Z2 + 4×30″",z:"Z2"},
-  {w:41,d:"SRE",t:"Moč",a:"25–30′ vzdrževanje",b:"25–30′ vzdrževanje",z:"Srednja"},
-  {w:41,d:"ČET",t:"Aerobno",a:"75′ Z2",b:"2:00 h Z2",z:"Z2"},
-  {w:41,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:41,d:"SOB",t:"Dolg trail",a:"3:00 h trail, Z2",b:"4:30 h kolo, Z2",z:"Z2"},
-  {w:41,d:"NED",t:"Aktivno",a:"60–75′ Z1",b:"90′ Z1 (~10–12 km) kolo",z:"Z1"},
-  {w:42,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:42,d:"TOR",t:"Klanec",a:"5×6′ vzpon @Z4",b:"5×9′ klanec @Z4",z:"Z4"},
-  {w:42,d:"SRE",t:"Moč",a:"25′ vzdrževanje + trup",b:"25′ vzdrževanje + trup",z:"Srednja"},
-  {w:42,d:"ČET",t:"Spec. vzdržl.",a:"90′ Z2/Z3, 3×12′ vzpona",b:"2:30 h Z2/Z3, 3×15′ klanca",z:"Z2/Z3"},
-  {w:42,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:42,d:"SOB",t:"Dolg trail",a:"4:00 h trail (~28–30 km), Z2, zadnja 45′ v temi",b:"5:30 h kolo z veliko D+",z:"Z2"},
-  {w:42,d:"NED",t:"Nočni spec.",a:"2:00 h trail, start ~21:00, Z1–Z2",b:"2:30 h kolo, zadnja ura v temi",z:"Z1/Z2"},
-  {w:43,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:43,d:"TOR",t:"Klanec",a:"6×5′ vzpon @Z4",b:"6×8′ klanec @Z4",z:"Z4"},
-  {w:43,d:"SRE",t:"Moč",a:"20–25′ vzdrževanje",b:"20–25′ vzdrževanje",z:"Nizka/Srednja"},
-  {w:43,d:"ČET",t:"Spec. vzdržl.",a:"90′ Z2 + 30′ Z3",b:"2:30 h Z2 + 40′ Z3",z:"Z2/Z3"},
-  {w:43,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:43,d:"SOB",t:"Dolg trail",a:"4:30–5:00 h trail (~31–37 km), 1200–1600 m D+, prehrana tekme",b:"6:00 h kolo z 1500–1900 m D+",z:"Z2"},
-  {w:43,d:"NED",t:"Nočni spec.",a:"3:00 h trail (~21–24 km), start ~20:30–21:30, zadnja ura Z1",b:"3:30 h kolo v mraku/noči",z:"Z1/Z2"},
-  {w:44,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:44,d:"TOR",t:"Aktivacija",a:"5×3′ vzpon @Z3/Z4",b:"5×5′ klanec @Z3/Z4",z:"Z3/Z4"},
-  {w:44,d:"SRE",t:"Mobilnost",a:"25′ mobilnost",b:"25′ mobilnost",z:"Nizka"},
-  {w:44,d:"ČET",t:"Kratek tek/kolo",a:"60′ Z2",b:"90′ Z2",z:"Z2"},
-  {w:44,d:"PET",t:"Počitek",a:"Počitek + priprava čelne svetilke/opreme",b:"Počitek + priprava opreme",z:"/"},
-  {w:44,d:"SOB",t:"Dolg trail",a:"2:30–3:00 h sproščeno (~18–22 km), del v temi",b:"4:00 h kolo sproščeno",z:"Z2"},
-  {w:44,d:"NED",t:"Počitek",a:"Počitek",b:"Počitek / 45′ Z1 kolo",z:"/"},
-  {w:45,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:45,d:"TOR",t:"Aktivacija",a:"35′ Z1–Z2 + 4×60″ Z3",b:"50′ Z1–Z2 + 4×90″ Z3",z:"Z2/Z3"},
-  {w:45,d:"SRE",t:"Mobilnost",a:"20′ mobilnost",b:"20′ mobilnost",z:"Nizka"},
-  {w:45,d:"ČET",t:"Kratek tek/kolo",a:"30–40′ Z1",b:"45–60′ Z1",z:"Z1"},
-  {w:45,d:"PET",t:"Počitek",a:"Počitek + priprava nočne opreme",b:"Počitek + priprava nočne opreme",z:"/"},
-  {w:45,d:"PET",t:"TEKMA",a:"K24 100 km 🌙🏁 · 6. 8. 2027 ob 22:00",b:"K24 100 km 🌙🏁 · tekma; kolo ni alternativa",z:"MAX"},
-  {w:45,d:"NED",t:"REGENERACIJA",a:"Počitek / praznovanje 🎉",b:"Počitek / zelo lahkotno kolo",z:"/"},
-  {w:46,d:"PON",t:"Počitek",a:"Popoln počitek po K24",b:"Popoln počitek po K24",z:"/"},
-  {w:46,d:"TOR",t:"Regeneracija",a:"30–40′ hoja ali zelo lahek tek Z1",b:"45–60′ zelo lahko kolo Z1",z:"Z1"},
-  {w:46,d:"SRE",t:"Mobilnost",a:"20–30′ mobilnost + lahkotno raztezanje",b:"20–30′ mobilnost + lahkotno raztezanje",z:"Nizka"},
-  {w:46,d:"ČET",t:"Regeneracija",a:"30–45′ Z1, samo če so noge sveže",b:"60–75′ Z1",z:"Z1"},
-  {w:46,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:46,d:"SOB",t:"Aktivno",a:"60–90′ lahek pohod",b:"90–120′ zelo lahko kolo",z:"Z1"},
-  {w:46,d:"NED",t:"Počitek",a:"Počitek",b:"45′ Z1 kolo, samo če pomaga regeneraciji",z:"/"},
-  {w:47,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:47,d:"TOR",t:"Aktivacija",a:"45′ Z1–Z2 + 4×2′ Z3 na blag klanec",b:"60′ Z1–Z2 + 4×4′ Z3",z:"Z2/Z3"},
-  {w:47,d:"SRE",t:"Moč",a:"30′ vzdrževanje + trup",b:"30′ vzdrževanje + trup",z:"Srednja"},
-  {w:47,d:"ČET",t:"Aerobno",a:"75′ Z2",b:"2:00 h Z2",z:"Z2"},
-  {w:47,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:47,d:"SOB",t:"Dolg trail",a:"2:30–3:00 h trail (~18–22 km), Z2",b:"4:00 h kolo, Z2",z:"Z2"},
-  {w:47,d:"NED",t:"Back-to-back",a:"60–75′ zelo lahkotno (~7–10 km), Z1",b:"90′ Z1 kolo",z:"Z1"},
-  {w:48,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:48,d:"TOR",t:"Klanec",a:"5×5′ vzpon @Z4, kontrolirano",b:"5×8′ klanec @Z4",z:"Z4"},
-  {w:48,d:"SRE",t:"Moč",a:"30′ funkcionalna moč",b:"30′ funkcionalna moč",z:"Srednja"},
-  {w:48,d:"ČET",t:"Spec. vzdržl.",a:"90′ Z2/Z3, 3×10′ vzpona",b:"2:30 h Z2/Z3, 3×15′ klanca",z:"Z2/Z3"},
-  {w:48,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:48,d:"SOB",t:"Dolg trail",a:"3:30–4:00 h trail (~25–30 km), 800–1200 m D+, prehrana 50–60 g OH/h",b:"5:00 h kolo z 1000–1400 m D+",z:"Z2"},
-  {w:48,d:"NED",t:"Back-to-back",a:"90′ trail (~10–13 km), Z1–Z2",b:"2:00 h zelo lahko kolo",z:"Z1/Z2"},
-  {w:49,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:49,d:"TOR",t:"Klanec",a:"6×6′ vzpon @Z4",b:"6×9′ klanec @Z4",z:"Z4"},
-  {w:49,d:"SRE",t:"Moč",a:"25–30′ vzdrževanje",b:"25–30′ vzdrževanje",z:"Srednja"},
-  {w:49,d:"ČET",t:"Spec. aerobno",a:"2:00 h Z2 z 4×10′ vzpona",b:"3:00 h Z2 z dolgimi klanci",z:"Z2/Z3"},
-  {w:49,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:49,d:"SOB",t:"Dolg trail",a:"4:30 h trail (~32–35 km), 1000–1400 m D+, zadnja ura zelo kontrolirano",b:"6:00 h kolo z veliko D+",z:"Z2"},
-  {w:49,d:"NED",t:"Back-to-back",a:"2:00 h trail (~14–17 km), Z1–Z2",b:"2:30 h Z1–Z2 kolo",z:"Z1/Z2"},
-  {w:50,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:50,d:"TOR",t:"Klanec",a:"5×8′ vzpon @Z3/Z4, brez forsiranja",b:"5×12′ klanec @Z3/Z4",z:"Z3/Z4"},
-  {w:50,d:"SRE",t:"Moč",a:"20–25′ vzdrževanje + trup",b:"20–25′ vzdrževanje + trup",z:"Nizka/Srednja"},
-  {w:50,d:"ČET",t:"Spec. vzdržl.",a:"2:00 h Z2/Z3, vadba prehrane za ultra",b:"3:00 h Z2/Z3, vadba prehrane za ultra",z:"Z2/Z3"},
-  {w:50,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:50,d:"SOB",t:"Dolg trail",a:"5:00–5:30 h trail (~35–40 km), 1200–1600 m D+, celotna prehranska strategija",b:"6:30 h kolo z 1400–1800 m D+",z:"Z2"},
-  {w:50,d:"NED",t:"Back-to-back",a:"2:30 h trail (~17–20 km), Z1–Z2",b:"3:00 h Z1–Z2 kolo",z:"Z1/Z2"},
-  {w:51,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:51,d:"TOR",t:"Aktivacija",a:"60′ Z2 + 4×2′ Z3",b:"90′ Z2 + 4×4′ Z3",z:"Z2/Z3"},
-  {w:51,d:"SRE",t:"Mobilnost",a:"25′ mobilnost",b:"25′ mobilnost",z:"Nizka"},
-  {w:51,d:"ČET",t:"Kratek tek/kolo",a:"60′ Z2",b:"90′ Z2",z:"Z2"},
-  {w:51,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:51,d:"SOB",t:"Dolg trail",a:"3:00 h trail (~21–24 km), sproščeno Z2",b:"4:30 h kolo, sproščeno Z2",z:"Z2"},
-  {w:51,d:"NED",t:"Počitek",a:"Počitek",b:"60′ Z1 kolo",z:"/"},
-  {w:52,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/"},
-  {w:52,d:"TOR",t:"Aktivacija",a:"45′ Z1–Z2 + 4×60–90″ Z3",b:"60′ Z1–Z2 + 4×2′ Z3",z:"Z2/Z3"},
-  {w:52,d:"SRE",t:"Mobilnost",a:"20′ mobilnost + priprava opreme",b:"20′ mobilnost + priprava opreme",z:"Nizka"},
-  {w:52,d:"ČET",t:"Kratek tek/kolo",a:"30–40′ Z1, brez napora",b:"45–60′ Z1",z:"Z1"},
-  {w:52,d:"PET",t:"TEKMA",a:"UTMB Nice 168 km 🏁 · 24. 9. 2027 ob 13:00 · OPCIJSKO",b:"UTMB Nice 168 km 🏁 · tekma; kolo ni alternativa",z:"MAX"},
-  {w:52,d:"SOB",t:"REGENERACIJA",a:"Počitek + hoja po občutku",b:"Počitek / zelo lahkotno kolo",z:"/"},
-  {w:52,d:"NED",t:"REGENERACIJA",a:"Počitek",b:"Počitek / zelo lahkotno kolo",z:"/"}
+  {w:9,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:9,d:"TOR",t:"Intervali",a:"Ogrevanje 15′ Z1–Z2 · 6×3′ hrib @Z4 (vmes 2–3′ lahkotno) · ohlajanje 10′ Z1 (~10–11 km)",b:"Ogrevanje 15′ Z1–Z2 · 6×5′ klanec @Z4, 50–60 rpm (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:9,d:"SRE",t:"Moč",a:"35–45′ moč nog + trup",b:"35–45′ moč nog + trup",z:"Srednja" },
+  {w:9,d:"ČET",t:"Spec. aerobno",a:"50′ Z3 (~8–9 km)",b:"75′ Z3",z:"Z3" },
+  {w:9,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:9,d:"SOB",t:"Dolg trail",a:"1:50 h trail (~14 km), 500 m D+, Z2",b:"2:20 h kolo, Z2, 500 m D+",z:"Z2" },
+  {w:9,d:"NED",t:"Aktivno",a:"45–60′ Z1 (~6–9 km)",b:"60′ Z1",z:"Z1" },
+  {w:10,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:10,d:"TOR",t:"Intervali",a:"Ogrevanje 15′ Z1–Z2 · 7×3′ hrib @Z4 (vmes 2–3′ lahkotno) · ohlajanje 10′ Z1 (~10–12 km)",b:"Ogrevanje 15′ Z1–Z2 · 7×5′ klanec @Z4, 50–60 rpm (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:10,d:"SRE",t:"Moč",a:"35–45′ moč nog + trup",b:"35–45′ moč nog + trup",z:"Srednja" },
+  {w:10,d:"ČET",t:"Spec. aerobno",a:"60′ Z3 (~10–11 km)",b:"90′ Z3",z:"Z3" },
+  {w:10,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:10,d:"SOB",t:"Dolg trail",a:"2:10 h trail (~16 km), 600 m D+, Z2",b:"2:40 h kolo, Z2, 600 m D+",z:"Z2" },
+  {w:10,d:"NED",t:"Aktivno",a:"45–60′ Z1 (~6–9 km)",b:"60′ Z1",z:"Z1" },
+  {w:11,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:11,d:"TOR",t:"Intervali",a:"Ogrevanje 15′ Z1–Z2 · 8×3′ hrib @Z4 (vmes 2–3′ lahkotno) · ohlajanje 10′ Z1 (~11–13 km)",b:"Ogrevanje 15′ Z1–Z2 · 8×5′ klanec @Z4, 50–60 rpm (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:11,d:"SRE",t:"Moč",a:"35–45′ moč nog + trup",b:"35–45′ moč nog + trup",z:"Srednja" },
+  {w:11,d:"ČET",t:"Spec. aerobno",a:"70′ Z3 (~11–12 km)",b:"105′ Z3",z:"Z3" },
+  {w:11,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:11,d:"SOB",t:"Dolg trail",a:"2:25 h trail (~18 km), 600 m D+, Z2",b:"3:00 h kolo, Z2, 600 m D+",z:"Z2" },
+  {w:11,d:"NED",t:"Aktivno",a:"45–60′ Z1 (~6–9 km)",b:"60′ Z1",z:"Z1" },
+  {w:12,d:"PON",t:"Počitek",a:"Popoln počitek",b:"Popoln počitek",z:"/" },
+  {w:12,d:"TOR",t:"Regeneracija",a:"30–40′ Z1 (zelo lahkotno) (~4–6 km)",b:"45′ Z1 (lahkotno vrtenje)",z:"Z1" },
+  {w:12,d:"SRE",t:"Mobilnost",a:"20–30′ mobilnost",b:"20–30′ mobilnost",z:"Nizka" },
+  {w:12,d:"ČET",t:"Regeneracija",a:"30–40′ Z1 (~4–6 km)",b:"45′ Z1",z:"Z1" },
+  {w:12,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:12,d:"SOB",t:"Aktivno",a:"90′ lahkoten pohod",b:"90′ kolesarjenje na kavo",z:"Z1" },
+  {w:12,d:"NED",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:13,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:13,d:"TOR",t:"Intervali",a:"Ogrevanje 15′ Z1–Z2 · 6×3′ hrib @Z4 (vmes 2–3′ lahkotno) · ohlajanje 10′ Z1 (~10–11 km)",b:"Ogrevanje 15′ Z1–Z2 · 6×5′ klanec @Z4, 50–60 rpm (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:13,d:"SRE",t:"Moč",a:"35–45′ moč nog + trup",b:"35–45′ moč nog + trup",z:"Srednja" },
+  {w:13,d:"ČET",t:"Spec. aerobno",a:"50′ Z3 (~8–9 km)",b:"75′ Z3",z:"Z3" },
+  {w:13,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:13,d:"SOB",t:"Dolg trail",a:"2:25 h trail (~18 km), 600 m D+, Z2",b:"3:00 h kolo, Z2, 600 m D+",z:"Z2" },
+  {w:13,d:"NED",t:"Aktivno",a:"45–60′ Z1 (~6–9 km)",b:"60′ Z1",z:"Z1" },
+  {w:14,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:14,d:"TOR",t:"Intervali",a:"Ogrevanje 15′ Z1–Z2 · 7×3′ hrib @Z4 (vmes 2–3′ lahkotno) · ohlajanje 10′ Z1 (~10–12 km)",b:"Ogrevanje 15′ Z1–Z2 · 7×5′ klanec @Z4, 50–60 rpm (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:14,d:"SRE",t:"Moč",a:"35–45′ moč nog + trup",b:"35–45′ moč nog + trup",z:"Srednja" },
+  {w:14,d:"ČET",t:"Spec. aerobno",a:"60′ Z3 (~10–11 km)",b:"90′ Z3",z:"Z3" },
+  {w:14,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:14,d:"SOB",t:"Dolg trail",a:"2:40 h trail (~20 km), 700 m D+, Z2",b:"3:20 h kolo, Z2, 700 m D+",z:"Z2" },
+  {w:14,d:"NED",t:"Aktivno",a:"45–60′ Z1 (~6–9 km)",b:"60′ Z1",z:"Z1" },
+  {w:15,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:15,d:"TOR",t:"Intervali",a:"Ogrevanje 15′ Z1–Z2 · 8×3′ hrib @Z4 (vmes 2–3′ lahkotno) · ohlajanje 10′ Z1 (~11–13 km)",b:"Ogrevanje 15′ Z1–Z2 · 8×5′ klanec @Z4, 50–60 rpm (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:15,d:"SRE",t:"Moč",a:"35–45′ moč nog + trup",b:"35–45′ moč nog + trup",z:"Srednja" },
+  {w:15,d:"ČET",t:"Spec. aerobno",a:"70′ Z3 (~11–12 km)",b:"105′ Z3",z:"Z3" },
+  {w:15,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:15,d:"SOB",t:"Dolg trail",a:"2:55 h trail (~22 km), 800 m D+, Z2",b:"3:40 h kolo, Z2, 800 m D+",z:"Z2" },
+  {w:15,d:"NED",t:"Aktivno",a:"45–60′ Z1 (~6–9 km)",b:"60′ Z1",z:"Z1" },
+  {w:16,d:"PON",t:"Počitek",a:"Popoln počitek",b:"Popoln počitek",z:"/" },
+  {w:16,d:"TOR",t:"Regeneracija",a:"30–40′ Z1 (zelo lahkotno) (~4–6 km)",b:"45′ Z1 (lahkotno vrtenje)",z:"Z1" },
+  {w:16,d:"SRE",t:"Mobilnost",a:"20–30′ mobilnost",b:"20–30′ mobilnost",z:"Nizka" },
+  {w:16,d:"ČET",t:"Regeneracija",a:"30–40′ Z1 (~4–6 km)",b:"45′ Z1",z:"Z1" },
+  {w:16,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:16,d:"SOB",t:"Aktivno",a:"90′ lahkoten pohod",b:"90′ kolesarjenje na kavo",z:"Z1" },
+  {w:16,d:"NED",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:17,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:17,d:"TOR",t:"Intervali",a:"Ogrevanje 15′ Z1–Z2 · 6×3′ hrib @Z4 (vmes 2–3′ lahkotno) · ohlajanje 10′ Z1 (~10–11 km)",b:"Ogrevanje 15′ Z1–Z2 · 6×5′ klanec @Z4, 50–60 rpm (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:17,d:"SRE",t:"Moč",a:"35–45′ moč nog + trup",b:"35–45′ moč nog + trup",z:"Srednja" },
+  {w:17,d:"ČET",t:"Spec. aerobno",a:"50′ Z3 (~8–9 km)",b:"75′ Z3",z:"Z3" },
+  {w:17,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:17,d:"SOB",t:"Dolg trail",a:"2:55 h trail (~22 km), 800 m D+, Z2",b:"3:40 h kolo, Z2, 800 m D+",z:"Z2" },
+  {w:17,d:"NED",t:"Aktivno",a:"45–60′ Z1 (~6–9 km)",b:"60′ Z1",z:"Z1" },
+  {w:18,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:18,d:"TOR",t:"Intervali",a:"Ogrevanje 15′ Z1–Z2 · 7×3′ hrib @Z4 (vmes 2–3′ lahkotno) · ohlajanje 10′ Z1 (~10–12 km)",b:"Ogrevanje 15′ Z1–Z2 · 7×5′ klanec @Z4, 50–60 rpm (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:18,d:"SRE",t:"Moč",a:"35–45′ moč nog + trup",b:"35–45′ moč nog + trup",z:"Srednja" },
+  {w:18,d:"ČET",t:"Spec. aerobno",a:"60′ Z3 (~10–11 km)",b:"90′ Z3",z:"Z3" },
+  {w:18,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:18,d:"SOB",t:"Dolg trail",a:"3:10 h trail (~24 km), 800 m D+, Z2",b:"4:00 h kolo, Z2, 800 m D+",z:"Z2" },
+  {w:18,d:"NED",t:"Aktivno",a:"45–60′ Z1 (~6–9 km)",b:"60′ Z1",z:"Z1" },
+  {w:19,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:19,d:"TOR",t:"Intervali",a:"Ogrevanje 15′ Z1–Z2 · 8×3′ hrib @Z4 (vmes 2–3′ lahkotno) · ohlajanje 10′ Z1 (~11–13 km)",b:"Ogrevanje 15′ Z1–Z2 · 8×5′ klanec @Z4, 50–60 rpm (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:19,d:"SRE",t:"Moč",a:"35–45′ moč nog + trup",b:"35–45′ moč nog + trup",z:"Srednja" },
+  {w:19,d:"ČET",t:"Spec. aerobno",a:"70′ Z3 (~11–12 km)",b:"105′ Z3",z:"Z3" },
+  {w:19,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:19,d:"SOB",t:"Dolg trail",a:"3:30 h trail (~26 km), 900 m D+, Z2",b:"4:20 h kolo, Z2, 900 m D+",z:"Z2" },
+  {w:19,d:"NED",t:"Aktivno",a:"45–60′ Z1 (~6–9 km)",b:"60′ Z1",z:"Z1" },
+  {w:20,d:"PON",t:"Počitek",a:"Popoln počitek",b:"Popoln počitek",z:"/" },
+  {w:20,d:"TOR",t:"Regeneracija",a:"30–40′ Z1 (zelo lahkotno) (~4–6 km)",b:"45′ Z1 (lahkotno vrtenje)",z:"Z1" },
+  {w:20,d:"SRE",t:"Mobilnost",a:"20–30′ mobilnost",b:"20–30′ mobilnost",z:"Nizka" },
+  {w:20,d:"ČET",t:"Regeneracija",a:"30–40′ Z1 (~4–6 km)",b:"45′ Z1",z:"Z1" },
+  {w:20,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:20,d:"SOB",t:"Aktivno",a:"90′ lahkoten pohod",b:"90′ kolesarjenje na kavo",z:"Z1" },
+  {w:20,d:"NED",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:21,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:21,d:"TOR",t:"Klanec",a:"4×8′ klanec (močno) @Z4",b:"Ogrevanje 15′ Z1–Z2 · 4×12′ klanec @Z4 (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:21,d:"SRE",t:"Moč",a:"45′ funkcionalna moč",b:"45′ funkcionalna moč",z:"Srednja" },
+  {w:21,d:"ČET",t:"Spec. vzdržl.",a:"80′ Z2/Z3 (~12–13 km)",b:"3:00 h Z2/Z3",z:"Z2/Z3" },
+  {w:21,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:21,d:"SOB",t:"Dolg trail",a:"3:20 h trail (~25 km), 1000 m D+, Z2",b:"4:10 h kolo, Z2, 1000 m D+",z:"Z2" },
+  {w:21,d:"NED",t:"Back-to-back",a:"60–90′ Z1 na utrujene noge (~8–13 km)",b:"1:30 h lahkotno vrtenje, Z1",z:"Z1" },
+  {w:22,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:22,d:"TOR",t:"Klanec",a:"5×8′ klanec (močno) @Z4",b:"Ogrevanje 15′ Z1–Z2 · 5×12′ klanec @Z4 (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:22,d:"SRE",t:"Moč",a:"45′ funkcionalna moč",b:"45′ funkcionalna moč",z:"Srednja" },
+  {w:22,d:"ČET",t:"Spec. vzdržl.",a:"90′ Z2/Z3 (~14–15 km)",b:"3:25 h Z2/Z3",z:"Z2/Z3" },
+  {w:22,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:22,d:"SOB",t:"Dolg trail",a:"3:45 h trail (~28 km), 1100 m D+, Z2",b:"4:40 h kolo, Z2, 1100 m D+",z:"Z2" },
+  {w:22,d:"NED",t:"Back-to-back",a:"60–90′ Z1 na utrujene noge (~8–13 km)",b:"1:30 h lahkotno vrtenje, Z1",z:"Z1" },
+  {w:23,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:23,d:"TOR",t:"Klanec",a:"6×8′ klanec (močno) @Z4",b:"Ogrevanje 15′ Z1–Z2 · 6×12′ klanec @Z4 (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:23,d:"SRE",t:"Moč",a:"45′ funkcionalna moč",b:"45′ funkcionalna moč",z:"Srednja" },
+  {w:23,d:"ČET",t:"Spec. vzdržl.",a:"100′ Z2/Z3 (~16–17 km)",b:"3:45 h Z2/Z3",z:"Z2/Z3" },
+  {w:23,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:23,d:"SOB",t:"Dolg trail",a:"4:00 h trail (~30 km), 1200 m D+, Z2",b:"5:00 h kolo, Z2, 1200 m D+",z:"Z2" },
+  {w:23,d:"NED",t:"Back-to-back",a:"60–90′ Z1 na utrujene noge (~8–13 km)",b:"1:30 h lahkotno vrtenje, Z1",z:"Z1" },
+  {w:24,d:"PON",t:"Počitek",a:"Popoln počitek",b:"Popoln počitek",z:"/" },
+  {w:24,d:"TOR",t:"Regeneracija",a:"30–40′ Z1 (zelo lahkotno) (~4–6 km)",b:"45′ Z1 (lahkotno vrtenje)",z:"Z1" },
+  {w:24,d:"SRE",t:"Mobilnost",a:"20–30′ mobilnost",b:"20–30′ mobilnost",z:"Nizka" },
+  {w:24,d:"ČET",t:"Regeneracija",a:"30–40′ Z1 (~4–6 km)",b:"45′ Z1",z:"Z1" },
+  {w:24,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:24,d:"SOB",t:"Aktivno",a:"90′ lahkoten pohod",b:"90′ kolesarjenje na kavo",z:"Z1" },
+  {w:24,d:"NED",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:25,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:25,d:"TOR",t:"Klanec",a:"4×8′ klanec (močno) @Z4",b:"Ogrevanje 15′ Z1–Z2 · 4×12′ klanec @Z4 (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:25,d:"SRE",t:"Moč",a:"45′ funkcionalna moč",b:"45′ funkcionalna moč",z:"Srednja" },
+  {w:25,d:"ČET",t:"Spec. vzdržl.",a:"80′ Z2/Z3 (~12–13 km)",b:"3:00 h Z2/Z3",z:"Z2/Z3" },
+  {w:25,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:25,d:"SOB",t:"Dolg trail",a:"4:15 h trail (~32 km), 1300 m D+, Z2",b:"5:20 h kolo, Z2, 1300 m D+",z:"Z2" },
+  {w:25,d:"NED",t:"Back-to-back",a:"60–90′ Z1 na utrujene noge (~8–13 km)",b:"1:30 h lahkotno vrtenje, Z1",z:"Z1" },
+  {w:26,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:26,d:"TOR",t:"Klanec",a:"5×8′ klanec (močno) @Z4",b:"Ogrevanje 15′ Z1–Z2 · 5×12′ klanec @Z4 (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:26,d:"SRE",t:"Moč",a:"45′ funkcionalna moč",b:"45′ funkcionalna moč",z:"Srednja" },
+  {w:26,d:"ČET",t:"Spec. vzdržl.",a:"90′ Z2/Z3 (~14–15 km)",b:"3:25 h Z2/Z3",z:"Z2/Z3" },
+  {w:26,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:26,d:"SOB",t:"Dolg trail",a:"4:40 h trail (~35 km), 1400 m D+, Z2",b:"5:50 h kolo, Z2, 1400 m D+",z:"Z2" },
+  {w:26,d:"NED",t:"Back-to-back",a:"60–90′ Z1 na utrujene noge (~8–13 km)",b:"1:30 h lahkotno vrtenje, Z1",z:"Z1" },
+  {w:27,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:27,d:"TOR",t:"Klanec",a:"6×8′ klanec (močno) @Z4",b:"Ogrevanje 15′ Z1–Z2 · 6×12′ klanec @Z4 (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:27,d:"SRE",t:"Moč",a:"45′ funkcionalna moč",b:"45′ funkcionalna moč",z:"Srednja" },
+  {w:27,d:"ČET",t:"Spec. vzdržl.",a:"100′ Z2/Z3 (~16–17 km)",b:"3:45 h Z2/Z3",z:"Z2/Z3" },
+  {w:27,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:27,d:"SOB",t:"Dolg trail",a:"5:05 h trail (~38 km), 1500 m D+, Z2",b:"6:20 h kolo, Z2, 1500 m D+",z:"Z2" },
+  {w:27,d:"NED",t:"Back-to-back",a:"60–90′ Z1 na utrujene noge (~8–13 km)",b:"1:30 h lahkotno vrtenje, Z1",z:"Z1" },
+  {w:28,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:28,d:"TOR",t:"Klanec",a:"4×8′ klanec (močno) @Z4",b:"Ogrevanje 15′ Z1–Z2 · 4×12′ klanec @Z4 (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:28,d:"SRE",t:"Moč",a:"45′ funkcionalna moč",b:"45′ funkcionalna moč",z:"Srednja" },
+  {w:28,d:"ČET",t:"Spec. vzdržl.",a:"80′ Z2/Z3 (~12–13 km)",b:"3:00 h Z2/Z3",z:"Z2/Z3" },
+  {w:28,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:28,d:"SOB",t:"Dolg trail",a:"3:45 h trail (~28 km), 1100 m D+, Z2",b:"4:40 h kolo, Z2, 1100 m D+",z:"Z2" },
+  {w:28,d:"NED",t:"Back-to-back",a:"60–90′ Z1 na utrujene noge (~8–13 km)",b:"1:30 h lahkotno vrtenje, Z1",z:"Z1" },
+  {w:29,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:29,d:"TOR",t:"Aktivacija",a:"45′ z nekaj sprinti (4×20″) (~7 km)",b:"60′ z nekaj sprinti (4×30″)",z:"Z1/Z2" },
+  {w:29,d:"SRE",t:"Mobilnost",a:"20′ mobilnost",b:"20′ mobilnost",z:"Nizka" },
+  {w:29,d:"ČET",t:"Kratek tek/kolo",a:"30–45′ Z2 (~4–7 km)",b:"60′ Z2",z:"Z2" },
+  {w:29,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:29,d:"SOB",t:"Dolg trail",a:"2:10 h sproščeno (~16 km), Z2",b:"2:40 h sproščeno kolo, Z2",z:"Z2" },
+  {w:29,d:"NED",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:30,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:30,d:"TOR",t:"Aktivacija",a:"Ogrevanje 15′ Z1–Z2 · 30′ (2×2′ Z4) + sprinti (~4–5 km) · ohlajanje 10′ Z1",b:"40′ lahkotno",z:"Z2/Z4" },
+  {w:30,d:"SRE",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:30,d:"ČET",t:"Kratek tek/kolo",a:"20′ lahkotno (~3 km)",b:"20′ lahkotno",z:"Z1" },
+  {w:30,d:"PET",t:"TEKMA",a:"UTVV 163 km 🏁 · 23. 4. 2027 · start 19:00 · OPCIJSKO / kontrolirano",b:"UTVV 163 km 🏁 · start 19:00 · kolo NI alternativa",z:"MAX" },
+  {w:30,d:"SOB",t:"REGENERACIJA",a:"Po tekmi: počitek, hrana, lahka hoja",b:"Počitek",z:"/" },
+  {w:30,d:"NED",t:"REGENERACIJA",a:"Počitek / hoja",b:"Počitek / zelo lahkotno kolo",z:"/" },
+  {w:31,d:"PON",t:"Počitek",a:"Popoln počitek",b:"Popoln počitek",z:"/" },
+  {w:31,d:"TOR",t:"Počitek",a:"Popoln počitek",b:"Popoln počitek",z:"/" },
+  {w:31,d:"SRE",t:"Mobilnost",a:"20–30′ mobilnost",b:"20–30′ mobilnost",z:"Nizka" },
+  {w:31,d:"ČET",t:"Regeneracija",a:"30–40′ Z1 (~4–6 km)",b:"45′ Z1",z:"Z1" },
+  {w:31,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:31,d:"SOB",t:"Aktivno",a:"90′ lahkoten pohod",b:"90′ kolesarjenje na kavo",z:"Z1" },
+  {w:31,d:"NED",t:"Aktivno",a:"45′ Z1 (~6 km)",b:"60′ Z1",z:"Z1" },
+  {w:32,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:32,d:"TOR",t:"Klanec",a:"4×8′ klanec (močno) @Z4",b:"Ogrevanje 15′ Z1–Z2 · 4×12′ klanec @Z4 (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:32,d:"SRE",t:"Moč",a:"45′ funkcionalna moč",b:"45′ funkcionalna moč",z:"Srednja" },
+  {w:32,d:"ČET",t:"Spec. vzdržl.",a:"90′ Z2/Z3 (~14–15 km)",b:"3:25 h Z2/Z3",z:"Z2/Z3" },
+  {w:32,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:32,d:"SOB",t:"Dolg trail",a:"4:00 h trail (~30 km), 1700 m D+, Z2",b:"5:00 h kolo, Z2, 1700 m D+",z:"Z2" },
+  {w:32,d:"NED",t:"Back-to-back",a:"60–90′ Z1 na utrujene noge (~8–13 km)",b:"1:30 h lahkotno vrtenje, Z1",z:"Z1" },
+  {w:33,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:33,d:"TOR",t:"Klanec",a:"5×8′ klanec (močno) @Z4",b:"Ogrevanje 15′ Z1–Z2 · 5×12′ klanec @Z4 (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:33,d:"SRE",t:"Moč",a:"45′ funkcionalna moč",b:"45′ funkcionalna moč",z:"Srednja" },
+  {w:33,d:"ČET",t:"Spec. vzdržl.",a:"100′ Z2/Z3 (~16–17 km)",b:"3:45 h Z2/Z3",z:"Z2/Z3" },
+  {w:33,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:33,d:"SOB",t:"Dolg trail",a:"4:40 h trail (~35 km), 1900 m D+, Z2",b:"5:50 h kolo, Z2, 1900 m D+",z:"Z2" },
+  {w:33,d:"NED",t:"Back-to-back",a:"60–90′ Z1 na utrujene noge (~8–13 km)",b:"1:30 h lahkotno vrtenje, Z1",z:"Z1" },
+  {w:34,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:34,d:"TOR",t:"Klanec",a:"6×8′ klanec (močno) @Z4",b:"Ogrevanje 15′ Z1–Z2 · 6×12′ klanec @Z4 (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:34,d:"SRE",t:"Moč",a:"45′ funkcionalna moč",b:"45′ funkcionalna moč",z:"Srednja" },
+  {w:34,d:"ČET",t:"Spec. vzdržl.",a:"110′ Z2/Z3 (~17–18 km)",b:"4:10 h Z2/Z3",z:"Z2/Z3" },
+  {w:34,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:34,d:"SOB",t:"Dolg trail",a:"5:20 h trail (~40 km), 2200 m D+, Z2",b:"6:40 h kolo, Z2, 2200 m D+",z:"Z2" },
+  {w:34,d:"NED",t:"Back-to-back",a:"60–90′ Z1 na utrujene noge (~8–13 km)",b:"1:30 h lahkotno vrtenje, Z1",z:"Z1" },
+  {w:35,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:35,d:"TOR",t:"Klanec",a:"6×8′ klanec (močno) @Z4",b:"Ogrevanje 15′ Z1–Z2 · 6×12′ klanec @Z4 (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:35,d:"SRE",t:"Moč",a:"45′ funkcionalna moč",b:"45′ funkcionalna moč",z:"Srednja" },
+  {w:35,d:"ČET",t:"Spec. vzdržl.",a:"120′ Z2/Z3 (~19–20 km)",b:"4:30 h Z2/Z3",z:"Z2/Z3" },
+  {w:35,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:35,d:"SOB",t:"Dolg trail",a:"6:00 h trail (~45 km), 2500 m D+, Z2",b:"7:30 h kolo, Z2, 2500 m D+",z:"Z2" },
+  {w:35,d:"NED",t:"Back-to-back",a:"60–90′ Z1 na utrujene noge (~8–13 km)",b:"1:30 h lahkotno vrtenje, Z1",z:"Z1" },
+  {w:36,d:"PON",t:"Počitek",a:"Popoln počitek",b:"Popoln počitek",z:"/" },
+  {w:36,d:"TOR",t:"Regeneracija",a:"30–40′ Z1 (zelo lahkotno) (~4–6 km)",b:"45′ Z1 (lahkotno vrtenje)",z:"Z1" },
+  {w:36,d:"SRE",t:"Mobilnost",a:"20–30′ mobilnost",b:"20–30′ mobilnost",z:"Nizka" },
+  {w:36,d:"ČET",t:"Regeneracija",a:"30–40′ Z1 (~4–6 km)",b:"45′ Z1",z:"Z1" },
+  {w:36,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:36,d:"SOB",t:"Aktivno",a:"90′ lahkoten pohod",b:"90′ kolesarjenje na kavo",z:"Z1" },
+  {w:36,d:"NED",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:37,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:37,d:"TOR",t:"Klanec",a:"4×8′ klanec (močno) @Z4",b:"Ogrevanje 15′ Z1–Z2 · 4×12′ klanec @Z4 (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:37,d:"SRE",t:"Moč",a:"45′ funkcionalna moč",b:"45′ funkcionalna moč",z:"Srednja" },
+  {w:37,d:"ČET",t:"Spec. vzdržl.",a:"90′ Z2/Z3 (~14–15 km)",b:"3:25 h Z2/Z3",z:"Z2/Z3" },
+  {w:37,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:37,d:"SOB",t:"Dolg trail",a:"4:00 h trail (~30 km), 1700 m D+, Z2",b:"5:00 h kolo, Z2, 1700 m D+",z:"Z2" },
+  {w:37,d:"NED",t:"Back-to-back",a:"60–90′ Z1 na utrujene noge (~8–13 km)",b:"1:30 h lahkotno vrtenje, Z1",z:"Z1" },
+  {w:38,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:38,d:"TOR",t:"Aktivacija",a:"45′ z nekaj sprinti (4×20″) (~7 km)",b:"60′ z nekaj sprinti (4×30″)",z:"Z1/Z2" },
+  {w:38,d:"SRE",t:"Mobilnost",a:"20′ mobilnost",b:"20′ mobilnost",z:"Nizka" },
+  {w:38,d:"ČET",t:"Kratek tek/kolo",a:"30–45′ Z2 (~4–7 km)",b:"60′ Z2",z:"Z2" },
+  {w:38,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:38,d:"SOB",t:"Dolg trail",a:"2:40 h sproščeno (~20 km), Z2",b:"3:20 h sproščeno kolo, Z2",z:"Z2" },
+  {w:38,d:"NED",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:39,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:39,d:"TOR",t:"Aktivacija",a:"Ogrevanje 15′ Z1–Z2 · 30′ (2×2′ Z4) + sprinti (~4–5 km) · ohlajanje 10′ Z1",b:"40′ lahkotno",z:"Z2/Z4" },
+  {w:39,d:"SRE",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:39,d:"ČET",t:"Kratek tek/kolo",a:"20′ lahkotno (~3 km)",b:"20′ lahkotno",z:"Z1" },
+  {w:39,d:"PET",t:"Počitek",a:"Počitek + priprava opreme",b:"Počitek + priprava opreme",z:"/" },
+  {w:39,d:"SOB",t:"TEKMA",a:"UTMB Lavaredo 80K 🏔️🏁 · 26. 6. 2027 · start 07:00 · GLAVNI CILJ",b:"UTMB Lavaredo 80K 🏔️🏁 · start 07:00 · tekma; kolo ni alternativa",z:"MAX" },
+  {w:39,d:"NED",t:"REGENERACIJA",a:"Počitek / praznovanje 🎉",b:"Počitek / zelo lahkotno kolo",z:"/" },
+  {w:40,d:"PON",t:"Počitek",a:"Popoln počitek",b:"Popoln počitek",z:"/" },
+  {w:40,d:"TOR",t:"Počitek",a:"Popoln počitek",b:"Popoln počitek",z:"/" },
+  {w:40,d:"SRE",t:"Mobilnost",a:"20–30′ mobilnost",b:"20–30′ mobilnost",z:"Nizka" },
+  {w:40,d:"ČET",t:"Regeneracija",a:"30–40′ Z1 (~4–6 km)",b:"45′ Z1",z:"Z1" },
+  {w:40,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:40,d:"SOB",t:"Aktivno",a:"90′ lahkoten pohod",b:"90′ kolesarjenje na kavo",z:"Z1" },
+  {w:40,d:"NED",t:"Aktivno",a:"45′ Z1 (~6 km)",b:"60′ Z1",z:"Z1" },
+  {w:41,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:41,d:"TOR",t:"Klanec",a:"4×8′ klanec (močno) @Z4",b:"Ogrevanje 15′ Z1–Z2 · 4×12′ klanec @Z4 (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:41,d:"SRE",t:"Moč",a:"45′ funkcionalna moč",b:"45′ funkcionalna moč",z:"Srednja" },
+  {w:41,d:"ČET",t:"Nočni spec.",a:"60′ Z2 s čelko (~9–10 km)",b:"90′ nočna vožnja z lučjo, Z2",z:"Z2" },
+  {w:41,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:41,d:"SOB",t:"Dolg trail",a:"4:40 h trail (~35 km), 1200 m D+, Z2",b:"5:50 h kolo, Z2, 1200 m D+",z:"Z2" },
+  {w:41,d:"NED",t:"Back-to-back",a:"60–90′ Z1 na utrujene noge (~8–13 km)",b:"1:30 h lahkotno vrtenje, Z1",z:"Z1" },
+  {w:42,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:42,d:"TOR",t:"Klanec",a:"5×8′ klanec (močno) @Z4",b:"Ogrevanje 15′ Z1–Z2 · 5×12′ klanec @Z4 (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:42,d:"SRE",t:"Moč",a:"45′ funkcionalna moč",b:"45′ funkcionalna moč",z:"Srednja" },
+  {w:42,d:"ČET",t:"Nočni spec.",a:"75′ Z2 s čelko (~11–12 km)",b:"113′ nočna vožnja z lučjo, Z2",z:"Z2" },
+  {w:42,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:42,d:"SOB",t:"Dolg trail",a:"5:35 h trail (~42 km), 1500 m D+, Z2",b:"7:00 h kolo, Z2, 1500 m D+",z:"Z2" },
+  {w:42,d:"NED",t:"Back-to-back",a:"60–90′ Z1 na utrujene noge (~8–13 km)",b:"1:30 h lahkotno vrtenje, Z1",z:"Z1" },
+  {w:43,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:43,d:"TOR",t:"Klanec",a:"4×8′ klanec (močno) @Z4",b:"Ogrevanje 15′ Z1–Z2 · 4×12′ klanec @Z4 (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:43,d:"SRE",t:"Moč",a:"45′ funkcionalna moč",b:"45′ funkcionalna moč",z:"Srednja" },
+  {w:43,d:"ČET",t:"Nočni spec.",a:"60′ Z2 s čelko (~9–10 km)",b:"90′ nočna vožnja z lučjo, Z2",z:"Z2" },
+  {w:43,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:43,d:"SOB",t:"Dolg trail",a:"4:00 h trail (~30 km), 1100 m D+, Z2",b:"5:00 h kolo, Z2, 1100 m D+",z:"Z2" },
+  {w:43,d:"NED",t:"Back-to-back",a:"60–90′ Z1 na utrujene noge (~8–13 km)",b:"1:30 h lahkotno vrtenje, Z1",z:"Z1" },
+  {w:44,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:44,d:"TOR",t:"Aktivacija",a:"45′ z nekaj sprinti (4×20″) (~7 km)",b:"60′ z nekaj sprinti (4×30″)",z:"Z1/Z2" },
+  {w:44,d:"SRE",t:"Mobilnost",a:"20′ mobilnost",b:"20′ mobilnost",z:"Nizka" },
+  {w:44,d:"ČET",t:"Kratek tek/kolo",a:"30–45′ Z2 (~4–7 km)",b:"60′ Z2",z:"Z2" },
+  {w:44,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:44,d:"SOB",t:"Dolg trail",a:"2:10 h sproščeno (~16 km), Z2",b:"2:40 h sproščeno kolo, Z2",z:"Z2" },
+  {w:44,d:"NED",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:45,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:45,d:"TOR",t:"Aktivacija",a:"Ogrevanje 15′ Z1–Z2 · 30′ (2×2′ Z4) + sprinti (~4–5 km) · ohlajanje 10′ Z1",b:"40′ lahkotno",z:"Z2/Z4" },
+  {w:45,d:"SRE",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:45,d:"ČET",t:"Kratek tek/kolo",a:"20′ lahkotno (~3 km)",b:"20′ lahkotno",z:"Z1" },
+  {w:45,d:"PET",t:"TEKMA",a:"K24 100 km 🌙🏁 · 6. 8. 2027 ob 22:00",b:"K24 100 km 🌙🏁 · tekma; kolo ni alternativa",z:"MAX" },
+  {w:45,d:"SOB",t:"REGENERACIJA",a:"Po tekmi: počitek, hrana, lahka hoja",b:"Počitek",z:"/" },
+  {w:45,d:"NED",t:"REGENERACIJA",a:"Počitek / hoja",b:"Počitek / zelo lahkotno kolo",z:"/" },
+  {w:46,d:"PON",t:"Počitek",a:"Popoln počitek",b:"Popoln počitek",z:"/" },
+  {w:46,d:"TOR",t:"Počitek",a:"Popoln počitek",b:"Popoln počitek",z:"/" },
+  {w:46,d:"SRE",t:"Mobilnost",a:"20–30′ mobilnost",b:"20–30′ mobilnost",z:"Nizka" },
+  {w:46,d:"ČET",t:"Regeneracija",a:"30–40′ Z1 (~4–6 km)",b:"45′ Z1",z:"Z1" },
+  {w:46,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:46,d:"SOB",t:"Aktivno",a:"90′ lahkoten pohod",b:"90′ kolesarjenje na kavo",z:"Z1" },
+  {w:46,d:"NED",t:"Aktivno",a:"45′ Z1 (~6 km)",b:"60′ Z1",z:"Z1" },
+  {w:47,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:47,d:"TOR",t:"Klanec",a:"4×8′ klanec (močno) @Z4",b:"Ogrevanje 15′ Z1–Z2 · 5×10′ klanec/prag @Z4 (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:47,d:"SRE",t:"Moč",a:"45′ funkcionalna moč",b:"45′ funkcionalna moč",z:"Srednja" },
+  {w:47,d:"ČET",t:"Spec. vzdržl.",a:"75′ Z2/Z3 (~12–13 km)",b:"2:30 h Z2/Z3 (bloki Z3 v tempu dirke)",z:"Z2/Z3" },
+  {w:47,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:47,d:"SOB",t:"Dolg trail",a:"4:00 h trail (~30 km), 1100 m D+, Z2",b:"6:00 h kolo, Z2 (tempo Istralanda, z opremo za dolgo dirko)",z:"Z2" },
+  {w:47,d:"NED",t:"Dolg trail",a:"75′ Z2 na utrujene noge (~11–12 km)",b:"3:00 h kolo, Z2",z:"Z2" },
+  {w:48,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:48,d:"TOR",t:"Klanec",a:"4×8′ klanec (močno) @Z4",b:"Ogrevanje 15′ Z1–Z2 · 6×10′ klanec/prag @Z4 (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:48,d:"SRE",t:"Moč",a:"45′ funkcionalna moč",b:"45′ funkcionalna moč",z:"Srednja" },
+  {w:48,d:"ČET",t:"Nočni spec.",a:"60′ Z2 s čelko (~9–10 km)",b:"2:30 h nočna vožnja z lučjo, Z2",z:"Z2" },
+  {w:48,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:48,d:"SOB",t:"Dolg trail",a:"6:00 h trail (~45 km), 1600 m D+, Z2",b:"9:00 h kolo, Z2 (tempo Istralanda, z opremo za dolgo dirko)",z:"Z2" },
+  {w:48,d:"NED",t:"Dolg trail",a:"90′ Z2 na utrujene noge (~13–14 km)",b:"5:00 h kolo, Z2 (druga dolga vožnja)",z:"Z2" },
+  {w:49,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:49,d:"TOR",t:"Klanec",a:"4×8′ klanec (močno) @Z4",b:"Ogrevanje 15′ Z1–Z2 · 4×10′ klanec/prag @Z4 (vmes 3–4′ lahkotno) · ohlajanje 10′ Z1",z:"Z4" },
+  {w:49,d:"SRE",t:"Moč",a:"45′ funkcionalna moč",b:"45′ funkcionalna moč",z:"Srednja" },
+  {w:49,d:"ČET",t:"Spec. vzdržl.",a:"75′ Z2/Z3 (~12–13 km)",b:"2:30 h Z2/Z3 (bloki Z3 v tempu dirke)",z:"Z2/Z3" },
+  {w:49,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:49,d:"SOB",t:"Dolg trail",a:"3:20 h trail (~25 km), 900 m D+, Z2",b:"5:00 h kolo, Z2 (tempo Istralanda, z opremo za dolgo dirko)",z:"Z2" },
+  {w:49,d:"NED",t:"Back-to-back",a:"60′ Z1 na utrujene noge (~8–9 km)",b:"2:00 h lahkotno vrtenje, Z1",z:"Z1" },
+  {w:50,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:50,d:"TOR",t:"Aktivacija",a:"45′ z nekaj sprinti (4×20″) (~7 km)",b:"60′ z nekaj sprinti (4×30″)",z:"Z1/Z2" },
+  {w:50,d:"SRE",t:"Mobilnost",a:"20′ mobilnost",b:"20′ mobilnost",z:"Nizka" },
+  {w:50,d:"ČET",t:"Kratek tek/kolo",a:"30–45′ Z2 (~4–7 km)",b:"60′ Z2",z:"Z2" },
+  {w:50,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:50,d:"SOB",t:"Dolg trail",a:"2:10 h sproščeno (~16 km), Z2",b:"2:40 h sproščeno kolo, Z2",z:"Z2" },
+  {w:50,d:"NED",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:51,d:"PON",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:51,d:"TOR",t:"Aktivacija",a:"Ogrevanje 15′ Z1–Z2 · 30′ (2×2′ Z4) + sprinti (~4–5 km) · ohlajanje 10′ Z1",b:"40′ lahkotno",z:"Z2/Z4" },
+  {w:51,d:"SRE",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:51,d:"ČET",t:"Kratek tek/kolo",a:"20′ lahkotno (~3 km)",b:"20′ lahkotno",z:"Z1" },
+  {w:51,d:"PET",t:"TEKMA",a:"Istraland 400 km 🚴🏁 · 17. 9. 2027 · start 07:00 · 5000 m D+, 70 % makadam",b:"Istraland 400 km 🚴🏁 · start 07:00 · kolesarska dirka",z:"MAX" },
+  {w:51,d:"SOB",t:"REGENERACIJA",a:"Po tekmi: počitek, hrana, lahka hoja",b:"Počitek",z:"/" },
+  {w:51,d:"NED",t:"REGENERACIJA",a:"Počitek / hoja",b:"Počitek / zelo lahkotno kolo",z:"/" },
+  {w:52,d:"PON",t:"Počitek",a:"Popoln počitek",b:"Popoln počitek",z:"/" },
+  {w:52,d:"TOR",t:"Počitek",a:"Popoln počitek",b:"Popoln počitek",z:"/" },
+  {w:52,d:"SRE",t:"Mobilnost",a:"20–30′ mobilnost",b:"20–30′ mobilnost",z:"Nizka" },
+  {w:52,d:"ČET",t:"Regeneracija",a:"30–40′ Z1 (~4–6 km)",b:"45′ Z1",z:"Z1" },
+  {w:52,d:"PET",t:"Počitek",a:"Počitek",b:"Počitek",z:"/" },
+  {w:52,d:"SOB",t:"Aktivno",a:"90′ lahkoten pohod",b:"90′ kolesarjenje na kavo",z:"Z1" },
+  {w:52,d:"NED",t:"Aktivno",a:"45′ Z1 (~6 km)",b:"60′ Z1",z:"Z1" },
 ];
 
 const WEEK_INFO = {
@@ -829,50 +900,50 @@ const WEEK_INFO = {
   6:{load:"3–5 h",focus:"🏁 GO4Trail 64 km · start 07:30 · tekma B"},
   7:{load:"3–5 h",focus:"Reset po GO4 · brez kakovostnih treningov"},
   8:{load:"5–7 h",focus:"Vrnitev v ritem · lahkotno + moč"},
-  9:{load:"7–9 h",focus:"Baza + moč · začetek novega cikla"},
-  10:{load:"7–10 h",focus:"Aerobna baza + prag"},
-  11:{load:"8–10 h",focus:"Baza · klanec + daljši aerobni dan"},
-  12:{load:"9–11 h",focus:"Baza · prvi resnejši dolg vikend"},
-  13:{load:"6–8 h",focus:"Razbremenitev + moč"},
-  14:{load:"8–10 h",focus:"Baza · progresija"},
-  15:{load:"9–11 h",focus:"Baza · vzponi + dolg trail"},
-  16:{load:"10–12 h",focus:"Baza · back-to-back"},
-  17:{load:"7–9 h",focus:"Razbremenitev + regeneracija"},
-  18:{load:"10–12 h",focus:"Prehod v ultra build"},
-  19:{load:"8–10 h",focus:"Ultra build · dolg trail"},
-  20:{load:"9–11 h",focus:"Ultra build · vertikalni fokus"},
-  21:{load:"10–12 h",focus:"Ultra build · back-to-back"},
-  22:{load:"7–9 h",focus:"Razbremenitev"},
-  23:{load:"10–12 h",focus:"Ultra build · 4–5 h specifično"},
-  24:{load:"11–13 h",focus:"Ultra build · dolg vikend"},
-  25:{load:"7–9 h",focus:"Razbremenitev"},
-  26:{load:"10–13 h",focus:"Ultra build · zadnji velik blok"},
-  27:{load:"11–13 h",focus:"Peak ultra · čas na nogah"},
-  28:{load:"8–10 h",focus:"Priprava na UTVV / simulacija"},
-  29:{load:"6–8 h",focus:"UTVV taper"},
-  30:{load:"3–8 h",focus:"🏁 UTVV 163 km · start 19:00 · OPCIJSKO / kontrolirano"},
-  31:{load:"3–6 h",focus:"Regeneracija po UTVV / ali simulaciji"},
-  32:{load:"8–10 h",focus:"Lavaredo specifično · vrnitev"},
-  33:{load:"9–11 h",focus:"Lavaredo · klanec + spusti"},
-  34:{load:"10–12 h",focus:"Lavaredo · 4–5 h trail"},
-  35:{load:"9–11 h",focus:"Lavaredo · back-to-back"},
-  36:{load:"10–13 h",focus:"Lavaredo · zadnji velik vikend"},
-  37:{load:"11–14 h",focus:"🔥 Peak week · zadnji zelo velik blok"},
-  38:{load:"7–9 h",focus:"Taper 1 · volumen ↓"},
-  39:{load:"4–6 h",focus:"🏔️ UTMB Lavaredo 80K · start 07:00 · GLAVNI CILJ"},
-  40:{load:"2–5 h",focus:"Recovery po Lavaredu"},
-  41:{load:"6–8 h",focus:"Vrnitev v ritem · K24 baza"},
-  42:{load:"8–10 h",focus:"K24 · dolžina + nočni trening"},
-  43:{load:"9–11 h",focus:"K24 · specifično + noč"},
-  44:{load:"5–7 h",focus:"K24 taper"},
-  45:{load:"2–5 h",focus:"🌙 K24 100 km · start 22:00"},
-  46:{load:"3–5 h",focus:"K24 recovery · odločitev o UTMB Nice še ni potrebna"},
-  47:{load:"6–8 h",focus:"Vrnitev v ritem · lahkotna specifična gradnja"},
-  48:{load:"8–10 h",focus:"Nice opcijsko · prvi specifični dolg trail"},
-  49:{load:"9–11 h",focus:"Nice opcijsko · dolg vikend + prehrana"},
-  50:{load:"10–12 h",focus:"Nice opcijsko · zadnji velik blok"},
-  51:{load:"5–7 h",focus:"Nice taper · samo če greš na tekmo"},
-  52:{load:"2–5 h",focus:"🏁 UTMB Nice 168 km · start 13:00 · OPCIJSKO"}
+  9:{load:"5–7 h",focus:"Baza · intervali + dolg trail" },
+  10:{load:"5–7 h",focus:"Baza · intervali + dolg trail" },
+  11:{load:"6–8 h",focus:"Baza · intervali + dolg trail" },
+  12:{load:"3–5 h",focus:"Razbremenitev + moč" },
+  13:{load:"5–7 h",focus:"Baza · intervali + dolg trail" },
+  14:{load:"6–8 h",focus:"Baza · intervali + dolg trail" },
+  15:{load:"6–8 h",focus:"Baza · intervali + dolg trail" },
+  16:{load:"3–5 h",focus:"Razbremenitev + moč" },
+  17:{load:"6–8 h",focus:"Baza · intervali + dolg trail" },
+  18:{load:"6–8 h",focus:"Baza · intervali + dolg trail" },
+  19:{load:"7–9 h",focus:"Baza · intervali + dolg trail" },
+  20:{load:"3–5 h",focus:"Razbremenitev + moč" },
+  21:{load:"7–9 h",focus:"Gradnja · klanec + dolg trail + back-to-back" },
+  22:{load:"8–10 h",focus:"Gradnja · klanec + dolg trail + back-to-back" },
+  23:{load:"8–10 h",focus:"Gradnja · klanec + dolg trail + back-to-back" },
+  24:{load:"3–5 h",focus:"Razbremenitev + moč" },
+  25:{load:"8–10 h",focus:"Gradnja · klanec + dolg trail + back-to-back" },
+  26:{load:"9–11 h",focus:"Gradnja · klanec + dolg trail + back-to-back" },
+  27:{load:"10–12 h",focus:"Gradnja · klanec + dolg trail + back-to-back" },
+  28:{load:"8–10 h",focus:"Gradnja · klanec + dolg trail + back-to-back" },
+  29:{load:"4–6 h",focus:"Taper · volumen ↓" },
+  30:{load:"3–5 h",focus:"🏁 UTVV 163 km · start 19:00 · OPCIJSKO / kontrolirano" },
+  31:{load:"2–4 h",focus:"Regeneracija" },
+  32:{load:"8–10 h",focus:"Gradnja · klanec + dolg trail + back-to-back" },
+  33:{load:"9–11 h",focus:"Gradnja · klanec + dolg trail + back-to-back" },
+  34:{load:"10–12 h",focus:"Gradnja · klanec + dolg trail + back-to-back" },
+  35:{load:"11–13 h",focus:"🔥 Peak Lavaredo · ~45 km, ~2500 m D+" },
+  36:{load:"3–5 h",focus:"Razbremenitev + moč" },
+  37:{load:"8–10 h",focus:"Gradnja · klanec + dolg trail + back-to-back" },
+  38:{load:"4–6 h",focus:"Taper · volumen ↓" },
+  39:{load:"3–5 h",focus:"🏔️ UTMB Lavaredo 80K · start 07:00 · GLAVNI CILJ" },
+  40:{load:"2–4 h",focus:"Regeneracija" },
+  41:{load:"8–10 h",focus:"Gradnja · klanec + dolg trail + back-to-back" },
+  42:{load:"10–12 h",focus:"K24 peak · dolg trail + back-to-back" },
+  43:{load:"8–10 h",focus:"Gradnja · klanec + dolg trail + back-to-back" },
+  44:{load:"4–6 h",focus:"Taper · volumen ↓" },
+  45:{load:"3–5 h",focus:"🌙 K24 100 km · start 22:00" },
+  46:{load:"2–4 h",focus:"Regeneracija" },
+  47:{load:"12–14 h",focus:"Istraland · specifika za 400 km" },
+  48:{load:"18–20 h",focus:"🔥 Istraland peak · 9 h vožnja + nočna vožnja" },
+  49:{load:"10–12 h",focus:"Istraland · specifika za 400 km" },
+  50:{load:"4–6 h",focus:"Taper · volumen ↓" },
+  51:{load:"3–5 h",focus:"🏁 Istraland 400 km · start 07:00" },
+  52:{load:"2–4 h",focus:"Recovery po Istralandu" },
 };
 
 // ─── STATE ───────────────────────────────────────────────────────────────────
@@ -1112,6 +1183,7 @@ function renderWeek() {
     const dayDate = new Date(w.startDate);
     dayDate.setDate(dayDate.getDate() + di);
     const dateStr = toLocalISODate(dayDate);
+    const isToday = dateStr === toLocalISODate(new Date());
     const dayIcuActs = icuActivities[dateStr] || [];
     const hasIcu = dayIcuActs.length > 0;
     const det = getDetail(currentWeek, d, ib);
@@ -1128,10 +1200,10 @@ function renderWeek() {
     const cardIsRest = isRest && !hasIcu;
     const isNoteOpen = expanded['note-' + key];
 
-    return `<div class="day-card${cardIsRest?' rest':''}${isDone?' done':''}" style="background:${cardIsRest?'var(--bg3)':'var(--bg2)'};border:1px solid ${isDone?'#2f9e44':cardIsRest?'#e9ecef':col+'33'}">
+    return `<div class="day-card${cardIsRest?' rest':''}${isDone?' done':''}${isToday?' today':''}" style="background:${cardIsRest?'var(--bg3)':'var(--bg2)'};border:1px solid ${isDone?'#2f9e44':cardIsRest?'#e9ecef':col+'33'}">
       <div class="day-header">
         <div class="day-icon-col">
-          <div class="day-day">${d.d}</div>
+          <div class="day-day">${d.d} · ${dayDate.toLocaleDateString("sl-SI",{day:"numeric",month:"short",year:"numeric"})}</div>
           <div class="day-emoji">${isDone?'✅':icon}</div>
         </div>
         <div class="day-info">
